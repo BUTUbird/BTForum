@@ -15,4 +15,4 @@ spring:
 logging:
   level:
     root: info
-    com.douyuehan.doubao: debug
+    org.butu: info
