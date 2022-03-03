@@ -1,7 +1,9 @@
 package org.butu.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.model.entity.Post;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.butu.model.vo.PostVO;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PostService extends IService<Post> {
 
+
+    Page<PostVO> getList(Page<PostVO> page, String tab);
 }

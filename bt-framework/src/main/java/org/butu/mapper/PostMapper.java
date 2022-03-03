@@ -1,8 +1,11 @@
 package org.butu.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 import org.butu.model.entity.Post;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.butu.model.vo.PostVO;
 
 /**
  * <p>
@@ -14,5 +17,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PostMapper extends BaseMapper<Post> {
-
+    /**
+     * 分页查询首页话题列表
+     * <p>
+     *
+     * @param page
+     * @param tab
+     * @return
+     */
+    Page<PostVO> selectListAndPage(@Param("page") Page<PostVO> page, @Param("tab") String tab);
 }

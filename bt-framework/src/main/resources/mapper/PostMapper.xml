@@ -2,4 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.butu.mapper.PostMapper">
 
+    <select id="selectListAndPage" resultType="org.butu.model.vo.PostVO">
+        SELECT
+        t.id,t.title,t.user_id,t.comments,
+        t.view,t.collects,t.top,t.essence,
+        t.create_time ,t.modify_time ,
+        u.username,u.alias, u.avatar
+        FROM bt_post t
+        LEFT JOIN bt_user u
+        ON t.user_id = u.id
+        <where>
+            <if test="tab == 'hot'">
+                date(t.create_time) &lt;= date_add(curdate(), interval 1 day)
+                and date(t.create_time) &gt;= date_sub(curdate(), interval 7 day)
+            </if>
+        </where>
+        <if test="tab != 'hot'">
+            order by t.create_time desc
+        </if>
+        <if test="tab == 'hot'">
+            order by t.view desc, t.create_time desc
+        </if>
+    </select>
 </mapper>
