@@ -3,6 +3,9 @@ package org.butu.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * @author BUTU
+ */
 public class MD5Utils {
 
     public static String getPwd(String pwd) {
