@@ -51,7 +51,7 @@ public class UserController {
         return ApiResult.success(map);
     }
     @GetMapping("/info")
-    public ApiResult<User> getUser(@RequestHeader(value = USER_NAME) String userName){
+    public ApiResult<User> getUser(@RequestHeader(value = USER_NAME ,defaultValue = "test") String userName){
         User user = userService.getUserByUsername(userName);
         return ApiResult.success(user);
     }
