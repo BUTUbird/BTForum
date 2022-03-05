@@ -115,6 +115,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return map;
     }
 
+    @Override
+    public List<Post> getRecommend(String id) {
+        return this.baseMapper.selectRecommend(id);
+    }
+
     private void setTopicTags(Page<PostVO> iPage) {
         iPage.getRecords().forEach(postTag -> {
             List<PostTag> postTags = postTagService.selectByTopicId(postTag.getId());

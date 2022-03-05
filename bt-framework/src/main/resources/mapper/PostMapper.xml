@@ -24,4 +24,11 @@
             order by t.view desc, t.create_time desc
         </if>
     </select>
+    <select id="selectRecommend" resultType="org.butu.model.entity.Post" parameterType="java.lang.String">
+        select *
+        from bt_post t
+        where t.id != #{id}
+        order by rand(), t.view
+            limit 10
+    </select>
 </mapper>

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.butu.model.vo.PostVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 话题表 Mapper 接口
@@ -26,4 +28,6 @@ public interface PostMapper extends BaseMapper<Post> {
      * @return
      */
     Page<PostVO> selectListAndPage(@Param("page") Page<PostVO> page, @Param("tab") String tab);
+
+    List<Post> selectRecommend(String id);
 }

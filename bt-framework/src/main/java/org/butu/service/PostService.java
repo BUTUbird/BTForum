@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.butu.model.entity.User;
 import org.butu.model.vo.PostVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,4 +26,6 @@ public interface PostService extends IService<Post> {
     Post create(PostDTO dto, User user);
 
     Map<String, Object> viewPost(String id);
+
+    List<Post> getRecommend(String id);
 }

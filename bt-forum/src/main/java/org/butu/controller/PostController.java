@@ -12,6 +12,7 @@ import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.butu.utils.JwtUtil.USER_NAME;
@@ -48,6 +49,11 @@ public class PostController {
     public ApiResult<Map<String, Object>>view(@RequestParam("id") String id){
         Map<String, Object> map = postService.viewPost(id);
         return ApiResult.success(map);
+    }
+    @GetMapping("/recommend")
+    public ApiResult<List<Post>>getRecommend(@RequestParam("topicId")String id){
+        List<Post> posts = postService.getRecommend(id);
+        return ApiResult.success(posts);
     }
 }
 
