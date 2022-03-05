@@ -1,14 +1,21 @@
 package org.butu.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
 import org.butu.mapper.TagMapper;
+import org.butu.service.PostService;
+import org.butu.service.PostTagService;
 import org.butu.service.TagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -20,7 +27,12 @@ import java.util.List;
  */
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
+    @Autowired
+    @Lazy
+    private PostService postService;
 
+    @Autowired
+    private PostTagService postTagService;
     @Override
     public List<Tag> insertTags(List<String> tags) {
         List<Tag> tagList = new ArrayList<>();
@@ -39,5 +51,15 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         }
 
         return tagList;
+    }
+
+    @Override
+    public Page<Post> selectPostByTagId(Page<Post> topicPage, String id) {
+        // 获取关联的话题ID
+        Set<String> ids = postTagService.selectTopicIdsByTagId(id);
+        LambdaQueryWrapper<Post> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(Post::getId, ids);
+
+        return postService.page(topicPage, wrapper);
     }
 }

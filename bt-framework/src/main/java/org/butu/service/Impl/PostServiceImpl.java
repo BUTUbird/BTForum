@@ -49,8 +49,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private TagService tagService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PostMapper postMapper;
+
     @Override
     public Page<PostVO> getList(Page<PostVO> page, String tab) {
         // 查询话题

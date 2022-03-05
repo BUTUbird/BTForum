@@ -1,5 +1,7 @@
 package org.butu.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +18,6 @@ import java.util.List;
 public interface TagService extends IService<Tag> {
 
     List<Tag> insertTags(List<String> tags);
+
+    Page<Post> selectPostByTagId(Page<Post> objectPage, String id);
 }
