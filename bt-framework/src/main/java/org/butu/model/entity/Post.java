@@ -78,7 +78,7 @@ public class Post implements Serializable {
 
     @ApiModelProperty("修改时间")
     @TableField("modify_time")
-    private LocalDateTime modifyTime;
+    private Date modifyTime;
 
 
 }
