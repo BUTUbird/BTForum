@@ -29,5 +29,7 @@ public interface PostMapper extends BaseMapper<Post> {
      */
     Page<PostVO> selectListAndPage(@Param("page") Page<PostVO> page, @Param("tab") String tab);
 
-    List<Post> selectRecommend(String id);
+    List<Post> selectRecommend(@Param("id") String id);
+
+    Page<PostVO> searchByKey(@Param("page") Page<PostVO> page, @Param("keyword") String keyword);
 }

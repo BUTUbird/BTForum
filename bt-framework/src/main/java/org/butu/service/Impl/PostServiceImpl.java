@@ -119,6 +119,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return this.baseMapper.selectRecommend(id);
     }
 
+    @Override
+    public Page<PostVO> searchByKey(String keyword, Page<PostVO> page) {
+        // 查询话题
+        Page<PostVO> iPage = this.baseMapper.searchByKey(page, keyword);
+        // 查询话题的标签
+        setPostTags(iPage);
+        return iPage;
+    }
+
     private void setPostTags(Page<PostVO> iPage) {
         iPage.getRecords().forEach(postTag -> {
             List<PostTag> postTags = postTagService.selectByTopicId(postTag.getId());

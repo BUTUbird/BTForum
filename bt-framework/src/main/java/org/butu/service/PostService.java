@@ -28,4 +28,6 @@ public interface PostService extends IService<Post> {
     Map<String, Object> viewPost(String id);
 
     List<Post> getRecommend(String id);
+
+    Page<PostVO> searchByKey(String keyword, Page<PostVO> page);
 }
