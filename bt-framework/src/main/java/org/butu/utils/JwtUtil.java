@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.*;
 
+/**
+ * @author BUTU
+ */
 public class JwtUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     public static final long EXPIRATION_TIME = 3600_000_000L; // 1000 hour

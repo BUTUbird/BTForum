@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -20,6 +22,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("bt_tag")
+@Builder
+@Accessors(chain = true)
 @ApiModel(value = "Tag对象", description = "标签表")
 public class Tag implements Serializable {
 

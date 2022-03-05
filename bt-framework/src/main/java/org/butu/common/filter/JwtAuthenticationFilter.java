@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author BUTU
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final PathMatcher pathMatcher = new AntPathMatcher();
 

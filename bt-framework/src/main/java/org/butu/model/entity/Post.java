@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -21,6 +25,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("bt_post")
+@Builder
+@Accessors(chain = true)
 @ApiModel(value = "Post对象", description = "话题表")
 public class Post implements Serializable {
 
@@ -68,7 +74,7 @@ public class Post implements Serializable {
 
     @ApiModelProperty("发布时间")
     @TableField("create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("修改时间")
     @TableField("modify_time")
