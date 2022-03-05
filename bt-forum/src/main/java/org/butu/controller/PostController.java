@@ -12,6 +12,8 @@ import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static org.butu.utils.JwtUtil.USER_NAME;
 
 /**
@@ -41,6 +43,11 @@ public class PostController {
         User user = userService.getUserByUsername(userName);
         Post post = postService.create(dto,user);
         return ApiResult.success(post);
+    }
+    @GetMapping()
+    public ApiResult<Map<String, Object>>view(@RequestParam("id") String id){
+        Map<String, Object> map = postService.viewPost(id);
+        return ApiResult.success(map);
     }
 }
 

@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.butu.model.entity.User;
 import org.butu.model.vo.PostVO;
 
+import java.util.Map;
+
 /**
  * <p>
  * 话题表 服务类
@@ -21,4 +23,6 @@ public interface PostService extends IService<Post> {
     Page<PostVO> getList(Page<PostVO> page, String tab);
 
     Post create(PostDTO dto, User user);
+
+    Map<String, Object> viewPost(String id);
 }

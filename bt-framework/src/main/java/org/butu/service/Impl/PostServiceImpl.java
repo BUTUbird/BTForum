@@ -2,6 +2,7 @@ package org.butu.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
 import org.butu.mapper.TagMapper;
@@ -13,17 +14,19 @@ import org.butu.model.entity.PostTag;
 import org.butu.model.entity.Tag;
 import org.butu.model.entity.User;
 import org.butu.model.vo.PostVO;
+import org.butu.model.vo.ProfileVO;
 import org.butu.service.PostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.butu.service.PostTagService;
 import org.butu.service.TagService;
+import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +47,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private UserMapper userMapper;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PostMapper postMapper;
     @Override
     public Page<PostVO> getList(Page<PostVO> page, String tab) {
         // 查询话题
@@ -54,6 +61,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Post create(PostDTO dto, User user) {
         Post post1 = this.baseMapper.selectOne(new LambdaQueryWrapper<Post>().eq(Post::getTitle, dto.getTitle()));
         Assert.isNull(post1, "话题已存在，请修改");
@@ -78,6 +86,33 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             postTagService.createPostTag(post.getId(),tags);
         }
         return post;
+    }
+
+    @Override
+    public Map<String, Object> viewPost(String id) {
+        Map<String,Object> map = new HashMap<>(16);
+        Post post = this.baseMapper.selectById(id);
+        Assert.notNull(post,"当前话题不存在,或已被作者删除");
+        //查询话题详情
+        post.setView(post.getView()+1);
+        this.baseMapper.updateById(post);
+        //emoji转码
+        post.setContent(EmojiParser.parseToUnicode(post.getContent()));
+        map.put("post", post);
+        //标签
+        QueryWrapper<PostTag>wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(PostTag::getTopicId, post.getId());
+        Set<String> set = new HashSet<>();
+        for (PostTag articleTag : postTagService.list(wrapper)){
+            set.add(articleTag.getTagId());
+        }
+        List<Tag> tags = tagService.listByIds(set);
+        map.put("tags", tags);
+        //作者
+        ProfileVO user = userService.getUserProfile(post.getUserId());
+        map.put("user", user);
+
+        return map;
     }
 
     private void setTopicTags(Page<PostVO> iPage) {

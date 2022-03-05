@@ -33,11 +33,11 @@ public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("主键")
-    @TableField("id")
+    @TableId("id")
     private String id;
 
     @ApiModelProperty("标题")
-    @TableId("title")
+    @TableField("title")
     private String title;
 
     @ApiModelProperty("markdown内容")

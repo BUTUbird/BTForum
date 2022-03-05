@@ -4,6 +4,7 @@ import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.butu.model.vo.ProfileVO;
 
 /**
  * <p>
@@ -20,4 +21,6 @@ public interface UserService extends IService<User> {
     String executeLogin(LoginDTO dto);
 
     User getUserByUsername(String username);
+
+    ProfileVO getUserProfile(String userId);
 }
