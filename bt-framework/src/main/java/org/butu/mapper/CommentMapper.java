@@ -3,6 +3,9 @@ package org.butu.mapper;
 import org.butu.model.entity.Comment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.butu.model.vo.CommentVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CommentMapper extends BaseMapper<Comment> {
 
+    List<CommentVO> getCommentsByPostID(String postId);
 }

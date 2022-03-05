@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +23,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 @TableName("bt_comment")
 @ApiModel(value = "Comment对象", description = "评论表")
 public class Comment implements Serializable {
@@ -44,7 +48,7 @@ public class Comment implements Serializable {
 
     @ApiModelProperty("发布时间")
     @TableField("create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("修改时间")
     @TableField("modify_time")

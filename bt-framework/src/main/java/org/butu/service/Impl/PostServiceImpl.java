@@ -56,7 +56,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         // 查询话题
         Page<PostVO> iPage = this.baseMapper.selectListAndPage(page, tab);
         // 查询话题的标签
-        setTopicTags(iPage);
+        setPostTags(iPage);
         return iPage;
     }
 
@@ -120,7 +120,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return this.baseMapper.selectRecommend(id);
     }
 
-    private void setTopicTags(Page<PostVO> iPage) {
+    private void setPostTags(Page<PostVO> iPage) {
         iPage.getRecords().forEach(postTag -> {
             List<PostTag> postTags = postTagService.selectByTopicId(postTag.getId());
             if (!postTags.isEmpty()) {
