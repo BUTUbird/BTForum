@@ -18,3 +18,7 @@ logging:
     org.butu: debug
 
 
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /tip/today

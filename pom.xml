@@ -33,6 +33,7 @@
                 <version>2.6.3</version>
                 <type>pom</type>
                 <scope>import</scope>
+
             </dependency>
 
             <!--mybatisPlus依赖-->
@@ -42,6 +43,12 @@
                 <version>3.5.1</version>
             </dependency>
 
+            <!--security支持-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>2.6.3</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>

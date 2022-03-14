@@ -11,6 +11,7 @@ import org.butu.model.entity.User;
 import org.butu.service.PostService;
 import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
