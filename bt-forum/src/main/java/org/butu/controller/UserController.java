@@ -3,7 +3,7 @@ package org.butu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.butu.common.api.ApiResult;
+import org.butu.common.api .ApiResult;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.Post;

@@ -74,7 +74,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .username(dto.getName())
                 .alias(dto.getName())
                 //TODO 此处需要MD5加密
-                .password(MD5Utils.getPwd(dto.getPass()))
+//                .password(MD5Utils.getPwd(dto.getPass()))
+                //使用SpringSecurity进行加密
+                .password(passwordEncoder.encode(dto.getPass()))
                 .email(dto.getEmail())
                 .createTime(new Date())
                 .status(true)
