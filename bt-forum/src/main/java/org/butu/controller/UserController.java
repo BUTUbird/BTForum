@@ -56,7 +56,7 @@ public class UserController {
         }
         Map<String, String>map = new HashMap<>(16);
         map.put("token",token);
-        return ApiResult.success(map);
+        return ApiResult.success(map,"登录成功");
     }
     @GetMapping("/info")
     public ApiResult<User> getUser(@RequestHeader(value = USER_NAME ,required = false) String userName){

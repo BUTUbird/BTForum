@@ -5,6 +5,7 @@ import org.butu.common.api.ApiResult;
 import org.butu.model.entity.Tip;
 import org.butu.service.TipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TipController {
     @Autowired
     private TipService tipService;
+
 
     @GetMapping("/today")
     public ApiResult<Tip> getRandomTip() {

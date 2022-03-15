@@ -17,18 +17,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @MapperScan("org.butu.mapper")
 public class ForumApp extends SpringBootServletInitializer {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return super.configure(builder);
-    }
-
-    @Bean
-    public FilterRegistrationBean jwtFilter() {
-        final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
-        registrationBean.setFilter(filter);
-        return registrationBean;
-    }
     public static void main(String[] args) {
         SpringApplication.run(ForumApp.class, args);
     }
