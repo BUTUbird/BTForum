@@ -32,3 +32,16 @@ secure:
     urls: #安全路径白名单
       - /tip/today
       - /user/login
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /user/register
+      - /user/login
+      - /user/info
+      - /logout
+      - /user/active
+      - /post/list
+      - /tip/today
+      - /promotion/all

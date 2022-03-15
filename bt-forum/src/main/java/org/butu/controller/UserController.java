@@ -12,11 +12,13 @@ import org.butu.service.PostService;
 import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,9 +60,10 @@ public class UserController {
         map.put("token",token);
         return ApiResult.success(map,"登录成功");
     }
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/info")
-    public ApiResult<User> getUser(@RequestHeader(value = USER_NAME ,required = false) String userName){
-        User user = userService.getUserByUsername(userName);
+    public ApiResult<User> getUser(Principal principal){
+        User user = userService.getUserByUsername(principal.getName());
         return ApiResult.success(user);
     }
 
