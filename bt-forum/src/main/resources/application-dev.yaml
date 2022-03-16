@@ -45,3 +45,4 @@ secure:
       - /promotion/all
       - /billboard/show
       - /comment/get_comments
+      - /user/verify

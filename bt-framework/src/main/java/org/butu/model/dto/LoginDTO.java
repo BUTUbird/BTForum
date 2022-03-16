@@ -16,5 +16,8 @@ public class LoginDTO {
     @Size(min = 6, max = 20, message = "登录密码长度在6-20")
     private String password;
 
+    @NotBlank(message = "验证码不能为空")
+    private String code;
+
     private Boolean rememberMe;
 }

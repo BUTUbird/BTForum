@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -27,4 +28,7 @@ public class RegisterDTO {
     @NotEmpty(message = "请输入电子邮箱")
     @Email(message = "邮箱格式不正确")
     private String email;
+
+    @NotBlank(message = "验证码不能为空")
+    private String code;
 }
