@@ -9,9 +9,11 @@ import org.butu.model.entity.User;
 import org.butu.service.FollowService;
 import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +30,11 @@ public class RelationshipController{
 private UserService userService;
 @Autowired
 private FollowService followService;
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/validate/{topicUserId}")
-    public ApiResult<Map<String, Object>> isFollow(@RequestHeader(value = USER_NAME) String userName
-            , @PathVariable("topicUserId") String topicUserId) {
-        User user = userService.getUserByUsername(userName);
+    public ApiResult<Map<String, Object>> isFollow(@PathVariable("topicUserId") String topicUserId, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
         Map<String, Object> map = new HashMap<>(16);
         map.put("hasFollow", false);
         if (!ObjectUtils.isEmpty(user)) {
@@ -44,10 +47,10 @@ private FollowService followService;
         }
         return ApiResult.success(map);
     }
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/subscribe/{userId}")
-    public ApiResult<Object> handleFollow(@RequestHeader(value = USER_NAME) String userName
-            , @PathVariable("userId") String parentId) {
-        User user = userService.getUserByUsername(userName);
+    public ApiResult<Object> handleFollow(@PathVariable("userId") String parentId,Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
         if (parentId.equals(user.getId())) {
             ApiAsserts.fail("您脸皮太厚了，怎么可以关注自己呢 😮");
         }
@@ -66,10 +69,10 @@ private FollowService followService;
         return ApiResult.success(null, "关注成功");
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/unsubscribe/{userId}")
-    public ApiResult<Object> handleUnFollow(@RequestHeader(value = USER_NAME) String userName
-            , @PathVariable("userId") String parentId) {
-        User umsUser = userService.getUserByUsername(userName);
+    public ApiResult<Object> handleUnFollow(@PathVariable("userId") String parentId,Principal principal) {
+        User umsUser = userService.getUserByUsername(principal.getName());
         Follow one = followService.getOne(
                 new LambdaQueryWrapper<Follow>()
                         .eq(Follow::getParentId, parentId)

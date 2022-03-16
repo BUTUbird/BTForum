@@ -9,8 +9,10 @@ import org.butu.model.vo.CommentVO;
 import org.butu.service.CommentService;
 import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import static org.butu.utils.JwtUtil.USER_NAME;
@@ -35,10 +37,11 @@ public class CommentController {
         List<CommentVO>comment = commentService.getCommentsByPostId(postId);
         return ApiResult.success(comment);
     }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/add_comment")
-    public ApiResult<Comment> add_comment(@RequestHeader(value = USER_NAME) String userName,
-                                          @RequestBody CommentDTO dto) {
-        User user = userService.getUserByUsername(userName);
+    public ApiResult<Comment> add_comment(@RequestBody CommentDTO dto, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
         Comment comment = commentService.create(dto, user);
         return ApiResult.success(comment);
     }

@@ -30,8 +30,6 @@ jwt:
 secure:
   ignored:
     urls: #安全路径白名单
-      - /tip/today
-      - /user/login
       - /**/v2/api-docs
       - /**/*.js
       - /**/*.css
@@ -40,8 +38,10 @@ secure:
       - /user/register
       - /user/login
       - /user/info
-      - /logout
+      - /user/logout
       - /user/active
-      - /post/list
       - /tip/today
+      - /post/list
       - /promotion/all
+      - /billboard/show
+      - /comment/get_comments
