@@ -4,6 +4,7 @@ package org.butu.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
 import org.butu.common.api.ApiResult;
+import org.butu.config.security.util.WordFilter.WordFilter;
 import org.butu.model.dto.PostDTO;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.User;
@@ -68,7 +69,7 @@ public class PostController {
         User user = userService.getUserByUsername(principal.getName());
         Assert.isTrue(user.getId().equals(post.getUserId()), "非本人无权修改");
         post.setModifyTime(new Date());
-        post.setContent(EmojiParser.parseToAliases(post.getContent()));
+        post.setContent(EmojiParser.parseToAliases(WordFilter.replaceWords(post.getContent())));
         postService.updateById(post);
         return ApiResult.success(post);
     }

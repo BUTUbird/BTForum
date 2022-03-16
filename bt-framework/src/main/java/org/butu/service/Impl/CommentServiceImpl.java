@@ -1,6 +1,7 @@
 package org.butu.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.butu.config.security.util.WordFilter.WordFilter;
 import org.butu.model.dto.CommentDTO;
 import org.butu.model.entity.Comment;
 import org.butu.mapper.CommentMapper;
@@ -41,7 +42,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public Comment create(CommentDTO dto, User user) {
         Comment comment = Comment.builder()
                 .userId(user.getId())
-                .content(dto.getContent())
+                .content(WordFilter.replaceWords(dto.getContent()))
                 .topicId(dto.getTopic_id())
                 .createTime(new Date())
                 .build();

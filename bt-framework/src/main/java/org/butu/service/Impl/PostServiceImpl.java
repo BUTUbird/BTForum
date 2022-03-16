@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
+import org.butu.config.security.util.WordFilter.WordFilter;
 import org.butu.mapper.TagMapper;
 import org.butu.mapper.UserMapper;
 import org.butu.model.dto.PostDTO;
@@ -67,8 +68,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //封装
         Post post = Post.builder()
                 .userId(user.getId())
-                .title(dto.getTitle())
-                .content(EmojiParser.parseToAliases(dto.getContent()))
+//                .title(dto.getTitle()) 敏感词过滤
+                .title(WordFilter.replaceWords(dto.getTitle()))
+//                .content(EmojiParser.parseToAliases(dto.getContent()))
+                .content(EmojiParser.parseToAliases(WordFilter.replaceWords(dto.getContent())))
                 .createTime(new Date())
                 .build();
         this.baseMapper.insert(post);
