@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-import static org.butu.utils.JwtUtil.USER_NAME;
 
 /**
  * <p>

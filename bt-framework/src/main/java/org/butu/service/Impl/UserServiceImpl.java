@@ -15,8 +15,6 @@ import org.butu.mapper.UserMapper;
 import org.butu.model.vo.ProfileVO;
 import org.butu.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.butu.utils.MD5Utils;
-import org.butu.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -30,8 +30,6 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.butu.utils.JwtUtil.USER_NAME;
-
 /**
  * <p>
  * 用户表 前端控制器

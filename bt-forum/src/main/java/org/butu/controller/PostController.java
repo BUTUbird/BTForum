@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.butu.utils.JwtUtil.USER_NAME;
+
 
 /**
  * <p>
