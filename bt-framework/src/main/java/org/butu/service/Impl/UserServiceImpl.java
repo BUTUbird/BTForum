@@ -144,4 +144,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return profile;
     }
 
+    @Override
+    public User getUserById(String id) {
+        return baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getId,id));
+    }
+
 }

@@ -23,4 +23,6 @@ public interface UserService extends IService<User> {
     User getUserByUsername(String username);
 
     ProfileVO getUserProfile(String userId);
+
+    User getUserById(String userId);
 }

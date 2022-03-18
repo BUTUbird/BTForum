@@ -20,4 +20,6 @@ public interface TagService extends IService<Tag> {
     List<Tag> insertTags(List<String> tags);
 
     Page<Post> selectPostByTagId(Page<Post> objectPage, String id);
+
+    Tag selectTagById(String id);
 }

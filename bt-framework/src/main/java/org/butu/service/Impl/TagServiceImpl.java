@@ -62,4 +62,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
         return postService.page(topicPage, wrapper);
     }
+
+    @Override
+    public Tag selectTagById(String id) {
+        return this.baseMapper.selectById(id);
+    }
 }
