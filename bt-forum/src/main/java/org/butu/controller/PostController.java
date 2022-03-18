@@ -61,7 +61,7 @@ public class PostController {
         return ApiResult.success(post);
     }
 
-    @GetMapping("/detailOne/{id}")
+    @GetMapping()
     public ApiResult<Map<String, Object>> view(@RequestParam("id") String id) {
         Map<String, Object> map = postService.viewPost(id);
         return ApiResult.success(map);
@@ -124,6 +124,13 @@ public class PostController {
                                              @RequestParam(value = "keyword") String keyword) {
         Page<PostVO> bmsPostPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
         return ApiResult.success(bmsPostPage);
+    }
+    @RequestMapping("/getAll")
+    public ApiResult<Page<PostVO>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
+                                          @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
+    {
+        Page<PostVO> postVOPage=postService.getList(new Page<>(pageNo, pageSize),"latest");
+        return ApiResult.success(postVOPage);
     }
 }
 

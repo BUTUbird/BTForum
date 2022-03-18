@@ -84,23 +84,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return addUser;
     }
 
-    //    @Override
-//    public String executeLogin(LoginDTO dto) {
-//        String token = null;
-//        try {
-//            User user = getUserByUsername(dto.getUsername());
-//            String encodePwd = MD5Utils.getPwd(dto.getPassword());
-//            if (!encodePwd.equals(user.getPassword())){
-//                throw new Exception("密码错误");
-//            }
-//            token = JwtUtil.generateToken(String.valueOf(user.getUsername()));
-//        }catch (Exception e){
-//            log.warn("用户不存在or密码验证失败=======>{}", dto.getUsername());
-//
-//        }
-//        return token;
-//    }
-
     @Override
     public String executeLogin(LoginDTO dto) {
         String token = null;
