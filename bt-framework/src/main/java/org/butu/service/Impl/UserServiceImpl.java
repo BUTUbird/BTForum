@@ -1,6 +1,7 @@
 package org.butu.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
@@ -137,6 +138,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Page<User> searchKey(String key, Page<User> page) {
         Page<User> ipage = this.baseMapper.searchkey(page, key);
         return ipage;
+    }
+
+    @Override
+    public void updateImg(String url,String username) {
+        User user = new User();
+        user.setAvatar(url);
+        baseMapper.update(user,new LambdaQueryWrapper<User>().eq(User::getUsername, username));
     }
 
 }

@@ -27,6 +27,11 @@ jwt:
   # 私钥
   secret: '2CF24FE663DBB493E56BA4E31BE6FD03'
 
+oss:
+  domain: http://r8uj7z8yq.hd-bkt.clouddn.com/     # 访问域名(默认使用七牛云测试域名)
+  accessKey: vzzbIV5XEzTXF-sQMjXRxX9NvBuHBGy3B9hVWJ9S # 公钥
+  secretKey: 5cjcnrzrDxX2bHTdZ90fJyUwJcM13HPfNyB5dd1w # 私钥
+  bucket: butu  #存储空间名称
 secure:
   ignored:
     urls: #安全路径白名单
@@ -46,3 +51,4 @@ secure:
       - /billboard/show
       - /comment/get_comments
       - /user/verify
+      - /upload

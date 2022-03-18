@@ -13,6 +13,7 @@ import org.butu.model.entity.Post;
 import org.butu.model.entity.User;
 import org.butu.service.CommentService;
 import org.butu.service.PostService;
+import org.butu.service.UploadService;
 import org.butu.service.UserService;
 import org.butu.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -53,7 +55,8 @@ public class UserController {
     private RedisService redisService;
     @Autowired
     private CommentService commentService;
-
+    @Autowired
+    private UploadService uploadService;
 
 
     @PostMapping("/register")
@@ -113,6 +116,14 @@ public class UserController {
     public ApiResult<User> updateUser(@RequestBody User umsUser) {
         userService.updateById(umsUser);
         return ApiResult.success(umsUser);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/uploadImg")
+    public ApiResult uploadImg(MultipartFile file,Principal principal){
+        String url = uploadService.upload(file);
+        userService.updateImg(url,principal.getName());
+        return ApiResult.success(url);
     }
 
     @GetMapping("/verify")

@@ -28,4 +28,6 @@ public interface UserService extends IService<User> {
     User getUserById(String userId);
 
     Page<User> searchKey(String key, Page<User> page);
+
+    void updateImg(String url,String username);
 }
