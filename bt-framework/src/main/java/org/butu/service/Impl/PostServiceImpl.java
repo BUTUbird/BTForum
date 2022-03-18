@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
+import org.butu.common.exception.ApiAsserts;
 import org.butu.config.security.util.WordFilter.WordFilter;
 import org.butu.mapper.TagMapper;
 import org.butu.mapper.UserMapper;
@@ -63,8 +64,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Post create(PostDTO dto, User user) {
-        Post post1 = this.baseMapper.selectOne(new LambdaQueryWrapper<Post>().eq(Post::getTitle, dto.getTitle()));
-        Assert.isNull(post1, "话题已存在，请修改");
+        Post post1 = this.baseMapper.selectOne(new LambdaQueryWrapper<Post>().eq(Post::getTitle, WordFilter.replaceWords(dto.getTitle())));
+        if (!ObjectUtils.isEmpty(post1)){
+            ApiAsserts.fail("标题重复，请重新编辑");
+        }
         //封装
         Post post = Post.builder()
                 .userId(user.getId())
