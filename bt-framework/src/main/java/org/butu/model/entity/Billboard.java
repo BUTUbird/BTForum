@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -41,7 +43,7 @@ public class Billboard implements Serializable {
 
     @ApiModelProperty("公告时间")
     @TableField("create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("1：展示中，0：过期")
     @TableField("shows")
