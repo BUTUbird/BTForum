@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.butu.mapper.UserMapper">
 
+    <select id="searchkey" resultType="org.butu.model.entity.User">
+        select *from bt_user u
+        <where>
+            <if test="key!=null">
+                and u.username like CONCAT('%','${key}','%')
+                or u.username = #{key}
+                or u.alias like CONCAT('%','${key}','%')
+                or u.alias = #{key}
+            </if>
+        </where>
+    </select>
 </mapper>

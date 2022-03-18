@@ -8,8 +8,10 @@ import org.butu.common.api .ApiResult;
 import org.butu.config.redis.RedisService;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
+import org.butu.model.entity.Comment;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.User;
+import org.butu.service.CommentService;
 import org.butu.service.PostService;
 import org.butu.service.UserService;
 import org.butu.utils.VerifyCodeUtils;
@@ -49,6 +51,8 @@ public class UserController {
     private DefaultKaptcha defaultKaptcha;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private CommentService commentService;
 
 
 
@@ -129,5 +133,37 @@ public class UserController {
         ImageIO.write(image, "png", out);
         out.flush();
         out.close();
+    }
+
+    /**
+     * 后台用户管理
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/getAll")
+    public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
+                                           @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
+    {
+        Page<User> umsUserPage=userService.page(new Page<>(pageNo, pageSize));
+        return ApiResult.success(umsUserPage);
+    }
+
+    @DeleteMapping("/deleteOne/{id}")
+    public ApiResult<String> deleteOne(@PathVariable("id") String id)
+    {
+        userService.removeById(id);
+        postService.remove(new LambdaQueryWrapper<Post>().eq(Post::getUserId, id));
+        commentService.remove(new LambdaQueryWrapper<Comment>().eq(Comment::getUserId,id));
+        return ApiResult.success(null,"删除成功");
+    }
+
+    @RequestMapping("/searchOne")
+    public ApiResult<Page<User>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
+                                              @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
+                                              @RequestParam(value = "key") String key)
+    {
+        Page<User> umsUserPage = userService.searchKey(key,new Page<>(pageNo, pageSize));
+        return ApiResult.success(umsUserPage);
     }
 }

@@ -1,5 +1,6 @@
 package org.butu.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.User;
@@ -25,4 +26,6 @@ public interface UserService extends IService<User> {
     ProfileVO getUserProfile(String userId);
 
     User getUserById(String userId);
+
+    Page<User> searchKey(String key, Page<User> page);
 }

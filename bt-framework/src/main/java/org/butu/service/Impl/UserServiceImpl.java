@@ -1,6 +1,7 @@
 package org.butu.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
 import org.butu.config.security.util.JwtTokenUtil;
@@ -147,6 +148,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getUserById(String id) {
         return baseMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getId,id));
+    }
+
+    @Override
+    public Page<User> searchKey(String key, Page<User> page) {
+        Page<User> ipage = this.baseMapper.searchkey(page, key);
+        return ipage;
     }
 
 }
