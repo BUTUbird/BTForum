@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
 import org.butu.mapper.TagMapper;
+import org.butu.model.vo.TagVO;
 import org.butu.service.PostService;
 import org.butu.service.PostTagService;
 import org.butu.service.TagService;
@@ -66,5 +67,10 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public Tag selectTagById(String id) {
         return this.baseMapper.selectById(id);
+    }
+
+    @Override
+    public List<TagVO> getTag() {
+        return this.baseMapper.getTag();
     }
 }

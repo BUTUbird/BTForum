@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.butu.mapper.TagMapper">
 
+    <select id="getTag" resultType="org.butu.model.vo.TagVO">
+        select name,topic_count as value from bt_tag order by topic_count desc limit 10;
+    </select>
 </mapper>

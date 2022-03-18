@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.common.api.ApiResult;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
+import org.butu.model.vo.TagVO;
 import org.butu.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,5 +52,26 @@ public class TagController {
         map.put("hotTags", hotTags);
 
         return ApiResult.success(map);
+    }
+
+
+    @RequestMapping("/echar")
+    public ApiResult<List<TagVO>> getTag(){
+        List<TagVO> tag = tagService.getTag();
+        return ApiResult.success(tag);
+    }
+    @RequestMapping("/getAll")
+    public ApiResult<Page<Tag>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
+                                          @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
+    {
+        Page<Tag> tagPage = tagService.page(new Page<>(pageNo, pageSize));
+        return ApiResult.success(tagPage);
+    }
+
+    @DeleteMapping("/deleteOne/{id}")
+    public ApiResult<String> deleteOne(@PathVariable("id") String id)
+    {
+        tagService.removeById(id);
+        return ApiResult.success(null,"删除成功");
     }
 }
