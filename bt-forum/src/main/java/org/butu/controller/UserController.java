@@ -93,6 +93,8 @@ public class UserController {
         map.put("token",token);
         return ApiResult.success(map,"登录成功");
     }
+
+
     @ApiOperation(value = "获取用户信息")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/info")
@@ -190,5 +192,19 @@ public class UserController {
     {
         Page<User> umsUserPage = userService.searchKey(key,new Page<>(pageNo, pageSize));
         return ApiResult.success(umsUserPage);
+    }
+
+
+
+    @ApiOperation(value = "获取token")
+    @PostMapping("/token")
+    public ApiResult<Map<String, String>>token(@Valid @RequestBody LoginDTO dto){
+        String token = userService.executeLogin(dto);
+        if (ObjectUtils.isEmpty(token)){
+            return ApiResult.failed("账号密码错误");
+        }
+        Map<String, String>map = new HashMap<>(16);
+        map.put("token",token);
+        return ApiResult.success(map,"登录成功");
     }
 }

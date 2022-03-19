@@ -72,4 +72,15 @@ public class Knife4jConfiguration {
                 .build();
     }
 }
+/**
+ * var code=ke.response.data.code;
+ * if(code==200){
+ *     //判断,如果服务端响应code是8200才执行操作
+ *     //获取token
+ *     var token=ke.response.data.data.token;
+ *     //1、如何参数是Header，则设置当前逻辑分组下的全局Header
+ *     ke.global.setHeader("Authorization",'Bearer '+token);
+ *
+ * }
+ */
 

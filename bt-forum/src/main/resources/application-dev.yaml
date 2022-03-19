@@ -65,6 +65,7 @@ secure:
       - /billboard/show
       - /comment/get_comments
       - /user/verify
+      - /user/token
       - /upload
       - /doc.html
       - /swagger-resources/**
