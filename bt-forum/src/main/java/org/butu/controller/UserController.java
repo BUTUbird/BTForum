@@ -4,6 +4,8 @@ package org.butu.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.butu.common.api .ApiResult;
 import org.butu.config.redis.RedisService;
 import org.butu.model.dto.LoginDTO;
@@ -42,6 +44,7 @@ import java.util.Map;
  * @author BUTUbird
  * @since 2022-03-02
  */
+@Api(tags = "用户管理")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -59,6 +62,7 @@ public class UserController {
     private UploadService uploadService;
 
 
+    @ApiOperation(value = "注册")
     @PostMapping("/register")
     public ApiResult<Map<String, Object>>register(@Valid @RequestBody RegisterDTO dto){
         String code = (String) redisService.get("KAPTCHA_KEY");
@@ -73,6 +77,8 @@ public class UserController {
         map.put("user",user);
         return ApiResult.success(map);
     }
+
+    @ApiOperation(value = "登录")
     @PostMapping("/login")
     public ApiResult<Map<String, String>>login(@Valid @RequestBody LoginDTO dto){
         String code = (String) redisService.get("KAPTCHA_KEY");
@@ -87,6 +93,7 @@ public class UserController {
         map.put("token",token);
         return ApiResult.success(map,"登录成功");
     }
+    @ApiOperation(value = "获取用户信息")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/info")
     public ApiResult<User> getUser(Principal principal){
@@ -94,11 +101,13 @@ public class UserController {
         return ApiResult.success(user);
     }
 
+    @ApiOperation(value = "退出登录")
     @GetMapping("/logout")
     public ApiResult<Object>logout(){
         return ApiResult.success(null,"注销成功");
     }
 
+    @ApiOperation(value = "获取用户名")
     @GetMapping("/{username}")
     public ApiResult<Map<String, Object>> getUserByName(@PathVariable("username") String username,
                                                         @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -112,12 +121,14 @@ public class UserController {
         map.put("topics", page);
         return ApiResult.success(map);
     }
+    @ApiOperation(value = "更新用户信息")
     @PostMapping("/update")
     public ApiResult<User> updateUser(@RequestBody User umsUser) {
         userService.updateById(umsUser);
         return ApiResult.success(umsUser);
     }
 
+    @ApiOperation(value = "上传头像")
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/uploadImg")
     public ApiResult uploadImg(MultipartFile file,Principal principal){
@@ -126,6 +137,7 @@ public class UserController {
         return ApiResult.success(url);
     }
 
+    @ApiOperation(value = "验证码")
     @GetMapping("/verify")
     public void createImageCode(HttpServletResponse response) throws IOException{
         //禁止缓存
@@ -152,6 +164,7 @@ public class UserController {
      * @param pageSize
      * @return
      */
+    @ApiOperation(value = "获取所有用户")
     @RequestMapping("/getAll")
     public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
                                            @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
@@ -159,7 +172,7 @@ public class UserController {
         Page<User> umsUserPage=userService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(umsUserPage);
     }
-
+    @ApiOperation(value = "删除用户")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id)
     {
@@ -169,6 +182,7 @@ public class UserController {
         return ApiResult.success(null,"删除成功");
     }
 
+    @ApiOperation(value = "查找用户")
     @RequestMapping("/searchOne")
     public ApiResult<Page<User>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
                                               @RequestParam(value = "size", defaultValue = "10") Integer pageSize,

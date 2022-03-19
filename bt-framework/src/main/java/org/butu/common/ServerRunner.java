@@ -18,6 +18,6 @@ public class ServerRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 打开浏览器
-        log.info("Server：http://127.0.0.1:8000 ⚡");
+        log.info("Knife4j：http://127.0.0.1:8000/doc.html#/home ⚡");
     }
 }

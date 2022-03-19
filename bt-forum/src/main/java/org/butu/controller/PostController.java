@@ -4,6 +4,8 @@ package org.butu.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
 import org.butu.config.security.util.WordFilter.WordFilter;
 import org.butu.model.dto.PostDTO;
@@ -30,6 +32,7 @@ import java.util.Map;
  * @author BUTUbird
  * @since 2022-03-02
  */
+@Api(tags = "帖子管理")
 @RestController
 @RequestMapping("/post")
 public class PostController {
@@ -44,7 +47,7 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
-
+    @ApiOperation(value = "列表")
     @GetMapping("/list")
     public ApiResult<Page<PostVO>> list(@RequestParam(value = "tab", defaultValue = "latest") String tab,
                                         @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -53,6 +56,7 @@ public class PostController {
         return ApiResult.success(list);
     }
 
+    @ApiOperation(value = "新增")
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public ApiResult<Post> create(@RequestBody PostDTO dto, Principal principal) {
@@ -61,18 +65,21 @@ public class PostController {
         return ApiResult.success(post);
     }
 
+    @ApiOperation(value = "详情")
     @GetMapping()
     public ApiResult<Map<String, Object>> view(@RequestParam("id") String id) {
         Map<String, Object> map = postService.viewPost(id);
         return ApiResult.success(map);
     }
 
+    @ApiOperation(value = "随便看看")
     @GetMapping("/recommend")
     public ApiResult<List<Post>> getRecommend(@RequestParam("topicId") String id) {
         List<Post> posts = postService.getRecommend(id);
         return ApiResult.success(posts);
     }
 
+    @ApiOperation(value = "修改")
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/update")
     public ApiResult<Post> update(@Valid @RequestBody Post post, Principal principal) {
@@ -84,6 +91,7 @@ public class PostController {
         return ApiResult.success(post);
     }
 
+    @ApiOperation(value = "删除")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public ApiResult<String> delete(@PathVariable("id") String id, Principal principal) {
@@ -101,6 +109,8 @@ public class PostController {
      * @param id
      * @return
      */
+
+    @ApiOperation(value = "删除（管理员）")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id) {
         Post post = postService.getById(id);
@@ -118,6 +128,7 @@ public class PostController {
         return ApiResult.success(null, "删除成功");
     }
 
+    @ApiOperation(value = "查找")
     @RequestMapping("/searchOne")
     public ApiResult<Page<PostVO>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
                                              @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
@@ -125,6 +136,7 @@ public class PostController {
         Page<PostVO> bmsPostPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
         return ApiResult.success(bmsPostPage);
     }
+    @ApiOperation(value = "列表（管理员）")
     @RequestMapping("/getAll")
     public ApiResult<Page<PostVO>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
                                           @RequestParam(value = "size", defaultValue = "10") Integer pageSize)

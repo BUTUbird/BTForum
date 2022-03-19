@@ -4,6 +4,7 @@ server:
 web:
   domain: http://localhost
 
+#数据库配置
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -12,11 +13,21 @@ spring:
     url: jdbc:mariadb://localhost:3306/bt_forum?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=GMT%2B8
     type: com.zaxxer.hikari.HikariDataSource
 
+  #Knife4J运行依赖
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+#是否激活 swagger
+swagger:
+  enable: true
+
+#日志配置
 logging:
   level:
     root: info
     org.butu: debug
 
+#JWT配置
 jwt:
   # Bearer Token
   tokenHead: 'Bearer '
@@ -27,14 +38,17 @@ jwt:
   # 私钥
   secret: '2CF24FE663DBB493E56BA4E31BE6FD03'
 
+#七牛云配置
 oss:
   domain: http://r8uj7z8yq.hd-bkt.clouddn.com/     # 访问域名(默认使用七牛云测试域名)
   accessKey: vzzbIV5XEzTXF-sQMjXRxX9NvBuHBGy3B9hVWJ9S # 公钥
   secretKey: 5cjcnrzrDxX2bHTdZ90fJyUwJcM13HPfNyB5dd1w # 私钥
   bucket: butu  #存储空间名称
+
+#安全路径白名单
 secure:
   ignored:
-    urls: #安全路径白名单
+    urls:
       - /**/v2/api-docs
       - /**/*.js
       - /**/*.css
@@ -52,3 +66,7 @@ secure:
       - /comment/get_comments
       - /user/verify
       - /upload
+      - /doc.html
+      - /swagger-resources/**
+      - /swagger/**
+

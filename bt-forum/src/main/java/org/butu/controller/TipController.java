@@ -1,6 +1,8 @@
 package org.butu.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
 import org.butu.model.entity.Tip;
 import org.butu.service.TipService;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/tip")
+@Api(tags = "每日一言")
 public class TipController {
     @Autowired
     private TipService tipService;
 
 
+    @ApiOperation(value = "一言")
     @GetMapping("/today")
     public ApiResult<Tip> getRandomTip() {
         Tip tip = tipService.getRandomTip();

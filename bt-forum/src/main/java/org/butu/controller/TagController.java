@@ -3,6 +3,8 @@ package org.butu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
@@ -26,11 +28,13 @@ import java.util.Map;
  * @since 2022-03-02
  */
 @RestController
+@Api(tags = "标签管理")
 @RequestMapping("/tag")
 public class TagController {
     @Autowired
     private TagService tagService;
 
+    @ApiOperation(value = "获取文章标签")
     @GetMapping("/{name}")
     public ApiResult<Map<String, Object>> getPostByTag(@PathVariable("name") String tagName,
                                                        @RequestParam(value = "page" ,defaultValue = "1") Integer page,
@@ -55,11 +59,13 @@ public class TagController {
     }
 
 
+    @ApiOperation(value = "表格数据")
     @RequestMapping("/echar")
     public ApiResult<List<TagVO>> getTag(){
         List<TagVO> tag = tagService.getTag();
         return ApiResult.success(tag);
     }
+    @ApiOperation(value = "获取所有标签")
     @RequestMapping("/getAll")
     public ApiResult<Page<Tag>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
                                           @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
@@ -68,6 +74,7 @@ public class TagController {
         return ApiResult.success(tagPage);
     }
 
+    @ApiOperation(value = "删除标签")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id)
     {
