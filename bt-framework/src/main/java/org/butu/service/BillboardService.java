@@ -2,6 +2,7 @@ package org.butu.service;
 
 import org.butu.model.entity.Billboard;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.butu.model.vo.CountVO;
 
 /**
  * <p>
@@ -14,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface BillboardService extends IService<Billboard> {
 
     void insertOne(String content);
+
+    CountVO statistics();
 }

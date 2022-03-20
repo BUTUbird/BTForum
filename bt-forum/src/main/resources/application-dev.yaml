@@ -63,6 +63,7 @@ secure:
       - /post/list
       - /promotion/all
       - /billboard/show
+      - /billboard/count
       - /comment/get_comments
       - /user/verify
       - /user/token

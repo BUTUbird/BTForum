@@ -92,5 +92,8 @@ public class User implements Serializable {
     @TableField("modify_time")
     private LocalDateTime modifyTime;
 
+    @ApiModelProperty("在线状态")
+    @TableField("live")
+    private Boolean live;
 
 }

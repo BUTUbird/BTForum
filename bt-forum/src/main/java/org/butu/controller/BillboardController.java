@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.butu.common.api.ApiResult;
 import org.butu.model.entity.Billboard;
+import org.butu.model.vo.CountVO;
 import org.butu.service.BillboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,5 +86,11 @@ public class BillboardController {
     {
         billboardService.insertOne(content);
         return ApiResult.success(null,"添加成功");
+    }
+    @ApiOperation(value = "网站统计")
+    @GetMapping("/count")
+    public ApiResult<CountVO> statistics(){
+        CountVO count = billboardService.statistics();
+        return ApiResult.success(count);
     }
 }

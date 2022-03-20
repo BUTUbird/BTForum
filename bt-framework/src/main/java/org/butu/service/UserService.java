@@ -30,4 +30,6 @@ public interface UserService extends IService<User> {
     Page<User> searchKey(String key, Page<User> page);
 
     void updateImg(String url,String username);
+
+    void logout(String name);
 }

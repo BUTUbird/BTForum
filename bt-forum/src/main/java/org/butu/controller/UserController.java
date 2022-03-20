@@ -2,6 +2,7 @@ package org.butu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.Api;
@@ -103,9 +104,11 @@ public class UserController {
         return ApiResult.success(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "退出登录")
     @GetMapping("/logout")
-    public ApiResult<Object>logout(){
+    public ApiResult<Object>logout(Principal principal){
+        userService.logout(principal.getName());
         return ApiResult.success(null,"注销成功");
     }
 

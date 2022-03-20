@@ -1,10 +1,10 @@
 package org.butu.service.Impl;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
+import org.butu.config.redis.RedisService;
 import org.butu.config.security.util.JwtTokenUtil;
 import org.butu.mapper.FollowMapper;
 import org.butu.mapper.PostMapper;
@@ -60,6 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private RedisService redisService;
     @Override
     public User executeRegister(RegisterDTO dto) {
         //查询是否相同的用户名
@@ -99,7 +101,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            //修改在线状态
+            LambdaUpdateWrapper<User> update = new LambdaUpdateWrapper<>();
+            update.eq(User::getUsername, dto.getUsername());
+            update.set(User::getLive, 1);
+            baseMapper.update(null, update);
+
             token = jwtTokenUtil.generateToken(userDetails);
+
+            redisService.set(userDetails.getUsername(), token, 60 * 60 * 24);
         }catch (UsernameNotFoundException e){
             log.warn("用户不存在=======>{}", dto.getUsername());
         }catch (BadCredentialsException e){
@@ -115,8 +126,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public ProfileVO getUserProfile(String userId) {
+
         ProfileVO profile = new ProfileVO();
         User user = baseMapper.selectById(userId);
+        if (user == null ){
+            ApiAsserts.fail("作者消失了，看看别的帖子吧！");
+        }
         BeanUtils.copyProperties(user, profile);
         //用户文章数
         int count = postMapper.selectCount(new LambdaQueryWrapper<Post>().eq(Post::getUserId, userId)).intValue();
@@ -145,6 +160,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setAvatar(url);
         baseMapper.update(user,new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+    }
+
+    @Override
+    public void logout(String name) {
+        //修改在线状态
+        LambdaUpdateWrapper<User> update = new LambdaUpdateWrapper<>();
+        update.eq(User::getUsername, name);
+        update.set(User::getLive, 0);
+        baseMapper.update(null, update);
+
+        //修改redis
+        redisService.del(name);
     }
 
 }
