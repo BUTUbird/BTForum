@@ -71,4 +71,5 @@ secure:
       - /doc.html
       - /swagger-resources/**
       - /swagger/**
+      - /carousel/show
 

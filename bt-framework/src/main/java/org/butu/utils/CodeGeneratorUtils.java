@@ -15,7 +15,7 @@ import java.util.List;
 public class CodeGeneratorUtils {
     public static void main(String[] args) {
         List<String> tables = new ArrayList<>();
-        tables.add("bt_post_tag");//需要生成的表
+        tables.add("bt_carousel");//需要生成的表
 
 
         FastAutoGenerator.create("jdbc:mariadb://localhost:3306/bt_forum?useUnicode=true&characterEncoding=utf-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai","root","root")
