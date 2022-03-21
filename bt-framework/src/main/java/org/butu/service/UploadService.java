@@ -1,6 +1,5 @@
 package org.butu.service;
 
-import org.butu.common.api.ApiResult;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
