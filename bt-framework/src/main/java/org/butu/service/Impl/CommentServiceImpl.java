@@ -29,7 +29,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public List<CommentVO> getCommentsByPostId(String postId) {
-        List<CommentVO> comment = new ArrayList<CommentVO>();
+        List<CommentVO> comment = new ArrayList<>();
         try {
             comment = this.baseMapper.getCommentsByPostID(postId);
         } catch (Exception e) {

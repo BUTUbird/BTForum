@@ -37,7 +37,7 @@ public class CommentController {
 
     @ApiOperation(value = "获取评论")
     @GetMapping("/get_comments")
-    public ApiResult<List<CommentVO>>getCommentsByByPostID(@RequestParam(value = "topicid",defaultValue = "1")String postId){
+    public ApiResult<List<CommentVO>>getCommentsByByPostID(@RequestParam(value = "topicid",defaultValue = "1") String postId){
         List<CommentVO>comment = commentService.getCommentsByPostId(postId);
         return ApiResult.success(comment);
     }
