@@ -8,7 +8,7 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.api .ApiResult;
-import org.butu.config.redis.RedisService;
+import org.butu.config.redis.RedisCache;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.Comment;
@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -56,7 +57,7 @@ public class UserController {
     @Autowired
     private DefaultKaptcha defaultKaptcha;
     @Autowired
-    private RedisService redisService;
+    private RedisCache redisCache;
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -66,7 +67,7 @@ public class UserController {
     @ApiOperation(value = "注册")
     @PostMapping("/register")
     public ApiResult<Map<String, Object>>register(@Valid @RequestBody RegisterDTO dto){
-        String code = (String) redisService.get("KAPTCHA_KEY");
+        String code =  redisCache.getCacheObject("KAPTCHA_KEY");
         if (!code.equals(dto.getCode())){
             return ApiResult.failed("验证码错误");
         }
@@ -82,7 +83,7 @@ public class UserController {
     @ApiOperation(value = "登录")
     @PostMapping("/login")
     public ApiResult<Map<String, String>>login(@Valid @RequestBody LoginDTO dto){
-        String code = (String) redisService.get("KAPTCHA_KEY");
+        String code =  redisCache.getCacheObject("KAPTCHA_KEY");
         if (!code.equals(dto.getCode())){
             return ApiResult.failed("验证码错误");
         }
@@ -156,7 +157,7 @@ public class UserController {
         BufferedImage image = new BufferedImage(300, 75, BufferedImage.TYPE_INT_RGB);
         String randomText = VerifyCodeUtils.drawRandomText(image);
         System.out.println("验证码->>>"+randomText);
-        redisService.set("KAPTCHA_KEY", randomText, 60);
+        redisCache.setCacheObject("KAPTCHA_KEY", randomText, 60, TimeUnit.SECONDS);
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "png", out);
         out.flush();

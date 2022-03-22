@@ -69,7 +69,7 @@ public class JwtTokenUtil {
      *
      * @param token 客户端传入的token
      */
-    private Claims getClaimsFromToken(String token) {
+    public  Claims getClaimsFromToken(String token) {
         Claims claims = null;
         try {
             claims = Jwts.parser()
@@ -104,7 +104,6 @@ public class JwtTokenUtil {
         }
         return username;
     }
-
     /**
      * 验证token是否还有效
      *

@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @program: BTForum
@@ -28,8 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //获取登录用户信息
         User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+        List<String> list = new ArrayList<>(Arrays.asList("test","admin"));
         if (user != null){
-            return new UserDetailsImpl(user);
+            return new UserDetailsImpl(user,list);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }

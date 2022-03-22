@@ -1,7 +1,7 @@
 package org.butu.service.Impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.butu.config.redis.RedisService;
+import org.butu.config.redis.RedisCache;
 import org.butu.model.entity.Tip;
 import org.butu.mapper.TipMapper;
 import org.butu.service.TipService;
@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -22,20 +24,20 @@ import org.springframework.util.ObjectUtils;
 @Service
 public class TipServiceImpl extends ServiceImpl<TipMapper, Tip> implements TipService {
     @Autowired
-    private RedisService redisService;
+    private RedisCache redisCache;
 
     @Override
     public Tip getRandomTip() {
         Tip todayTip = null;
         try {
             //查找本地redis有无数据
-            todayTip = (Tip) redisService.get("today_tip");
+            todayTip = (Tip) redisCache.getCacheObject("today_tip");
             //没有数据
             if (ObjectUtils.isEmpty(todayTip)) {
                 //从数据库里获取数据
                 todayTip = this.baseMapper.getRandomTip();
                 //将数据存在redis，并设置24小事刷新一次
-                redisService.set("today_tip", todayTip, 24 * 60 * 60);
+                redisCache.setCacheObject("today_tip", todayTip, 24 * 60 * 60, TimeUnit.SECONDS);
             }
 
         }catch (Exception e) {

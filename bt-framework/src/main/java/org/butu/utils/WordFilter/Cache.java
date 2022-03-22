@@ -1,4 +1,4 @@
-package org.butu.config.security.util.WordFilter;
+package org.butu.utils.WordFilter;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,4 +1,4 @@
-package org.butu.config.security.util.WordFilter;
+package org.butu.utils.WordFilter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

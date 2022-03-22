@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
-import org.butu.config.redis.RedisService;
+import org.butu.config.redis.RedisCache;
 import org.butu.config.security.util.JwtTokenUtil;
 import org.butu.mapper.FollowMapper;
 import org.butu.mapper.PostMapper;
@@ -20,8 +20,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -61,7 +64,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private RedisService redisService;
+    private RedisCache redisCache;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Override
     public User executeRegister(RegisterDTO dto) {
         //查询是否相同的用户名
@@ -101,7 +107,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
             //修改在线状态
             LambdaUpdateWrapper<User> update = new LambdaUpdateWrapper<>();
             update.eq(User::getUsername, dto.getUsername());
@@ -109,8 +114,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             baseMapper.update(null, update);
 
             token = jwtTokenUtil.generateToken(userDetails);
-
-            redisService.set(userDetails.getUsername(), token, 60 * 60 * 24);
+            System.out.println(userDetails.getUsername());
+            redisCache.setCacheObject(userDetails.getUsername(), token, 60 * 60 * 24, TimeUnit.SECONDS);
         }catch (UsernameNotFoundException e){
             log.warn("用户不存在=======>{}", dto.getUsername());
         }catch (BadCredentialsException e){
@@ -171,7 +176,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         baseMapper.update(null, update);
 
         //修改redis
-        redisService.del(name);
+        redisCache.deleteObject(name);
     }
 
 }

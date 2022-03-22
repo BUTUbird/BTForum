@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
 import org.butu.common.exception.ApiAsserts;
-import org.butu.config.security.util.WordFilter.WordFilter;
+import org.butu.utils.WordFilter.WordFilter;
 import org.butu.mapper.TagMapper;
 import org.butu.mapper.UserMapper;
 import org.butu.model.dto.PostDTO;

@@ -7,7 +7,7 @@ import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
-import org.butu.config.security.util.WordFilter.WordFilter;
+import org.butu.utils.WordFilter.WordFilter;
 import org.butu.model.dto.PostDTO;
 import org.butu.model.entity.*;
 import org.butu.model.vo.PostVO;
@@ -136,6 +136,7 @@ public class PostController {
         Page<PostVO> bmsPostPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
         return ApiResult.success(bmsPostPage);
     }
+    @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "列表（管理员）")
     @RequestMapping("/getAll")
     public ApiResult<Page<PostVO>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,

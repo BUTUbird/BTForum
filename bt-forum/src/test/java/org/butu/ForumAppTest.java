@@ -1,6 +1,9 @@
 package org.butu;
 
+
+import org.butu.config.redis.RedisCache;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -13,8 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ForumAppTest {
+    @Autowired
+    private RedisCache redisCache;
     @Test
     public void test(){
-        System.out.println(1111);
+        redisCache.deleteObject("User:1499001665137684481");
+
     }
 }
