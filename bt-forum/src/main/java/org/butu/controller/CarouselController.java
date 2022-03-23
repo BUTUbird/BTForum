@@ -3,6 +3,7 @@ package org.butu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
 import org.butu.model.dto.CarouselDTO;
@@ -24,12 +25,13 @@ import java.util.List;
  * @author BUTUbird
  * @since 2022-03-23
  */
+@Api(tags = "轮播图管理")
 @RestController
 @RequestMapping("/carousel")
 public class CarouselController {
     @Autowired
     private CarouselService carouselService;
-    @ApiOperation(value = "公告查询")
+    @ApiOperation(value = "查询")
     @GetMapping("/show")
     public ApiResult<List<Carousel>> getNotices(){
         List<Carousel> list = carouselService.list(new
