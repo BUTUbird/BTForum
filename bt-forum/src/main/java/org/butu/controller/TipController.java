@@ -25,14 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/tip")
 @Api(tags = "每日一言")
 public class TipController {
+
     @Autowired
     private TipService tipService;
-
 
     @ApiOperation(value = "一言")
     @GetMapping("/today")
     public ApiResult<Tip> getRandomTip() {
-        Tip tip = tipService.getRandomTip();
-        return ApiResult.success(tip);
+        return ApiResult.success(tipService.getRandomTip());
     }
 }

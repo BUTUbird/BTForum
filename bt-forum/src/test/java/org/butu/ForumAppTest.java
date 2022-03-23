@@ -1,11 +1,17 @@
 package org.butu;
 
 
+
+import com.alibaba.fastjson.JSON;
 import org.butu.config.redis.RedisCache;
 import org.butu.mapper.MenuMapper;
+import org.butu.model.entity.Tip;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * @program: BTForum
@@ -23,7 +29,23 @@ public class ForumAppTest {
     private MenuMapper menuMapper;
     @Test
     public void test(){
-        System.out.println(menuMapper.selectPermsByUserId("1504657025806737409"));
 
+
+//        String today_tip = JSON.toJSONString(redisCache.getCacheObject("today_tip"));
+//        Tip tip = JSON.parseObject(redisCache.getCacheObject("today_tip"), Tip.class);
+//        Object today_tip = redisCache.getCacheObject("today_tip");
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Tip tip = objectMapper.convertValue(today_tip, Tip.class);
+//        System.out.println(tip.getContent());
+//        Tip tip = Tip.builder()
+//                .author("test")
+//                .content("test")
+//                .id(1)
+//                .build();
+//        String s = JSON.toJSONString(tip);
+//        System.out.println(s);
+//        redisCache.setCacheObject("today_tip", tip, 60*60, TimeUnit.SECONDS);
+      redisCache.deleteObject("today_tip");
     }
 }

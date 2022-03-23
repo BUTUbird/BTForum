@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * <p>
@@ -18,10 +19,14 @@ import lombok.Setter;
  * @author BUTUbird
  * @since 2022-03-01
  */
+@Builder
 @Getter
 @Setter
 @TableName("bt_tip")
 @ApiModel(value = "Tip对象", description = "每日赠言")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Tip implements Serializable {
 
     private static final long serialVersionUID = 1L;
