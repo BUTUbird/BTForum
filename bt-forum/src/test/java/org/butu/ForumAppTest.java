@@ -2,6 +2,7 @@ package org.butu;
 
 
 import org.butu.config.redis.RedisCache;
+import org.butu.mapper.MenuMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ForumAppTest {
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private MenuMapper menuMapper;
     @Test
     public void test(){
-        redisCache.deleteObject("User:1499001665137684481");
+        System.out.println(menuMapper.selectPermsByUserId("1504657025806737409"));
 
     }
 }

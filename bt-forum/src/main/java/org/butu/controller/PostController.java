@@ -109,7 +109,7 @@ public class PostController {
      * @param id
      * @return
      */
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除（管理员）")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id) {
@@ -127,7 +127,7 @@ public class PostController {
         postService.removeById(id);
         return ApiResult.success(null, "删除成功");
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "查找")
     @RequestMapping("/searchOne")
     public ApiResult<Page<PostVO>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
@@ -136,7 +136,7 @@ public class PostController {
         Page<PostVO> bmsPostPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
         return ApiResult.success(bmsPostPage);
     }
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "列表（管理员）")
     @RequestMapping("/getAll")
     public ApiResult<Page<PostVO>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,

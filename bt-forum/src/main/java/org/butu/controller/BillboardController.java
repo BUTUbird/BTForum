@@ -12,6 +12,7 @@ import org.butu.model.vo.CountVO;
 import org.butu.service.BillboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class BillboardController {
      * @param pageSize
      * @return
      */
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有")
     @GetMapping("/getAll")
     public ApiResult<Page<Billboard>>getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
@@ -54,6 +56,7 @@ public class BillboardController {
         Page<Billboard> billboards= billboardService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(billboards);
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") Integer id)
@@ -61,7 +64,7 @@ public class BillboardController {
         billboardService.removeById(id);
         return ApiResult.success(null,"删除成功");
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "禁用")
     @RequestMapping("/disableOne/{id}")
     public ApiResult<String> disableOne(@PathVariable("id") Integer id)
@@ -71,6 +74,7 @@ public class BillboardController {
         billboardService.updateById(billboard);
         return ApiResult.success(null,"禁用成功");
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "显示")
     @PostMapping("/ableOne/{id}")
     public ApiResult<String> ableOne(@PathVariable("id") Integer id)
@@ -80,6 +84,7 @@ public class BillboardController {
         billboardService.updateById(billboard);
         return ApiResult.success(null,"已启用");
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "新增")
     @PostMapping("/insertOne/{data}")
     public ApiResult<String> insertOne(@PathVariable("data") String content)

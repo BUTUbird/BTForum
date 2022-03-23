@@ -12,6 +12,7 @@ import org.butu.model.vo.TagVO;
 import org.butu.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,13 +59,14 @@ public class TagController {
         return ApiResult.success(map);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "表格数据")
     @RequestMapping("/echar")
     public ApiResult<List<TagVO>> getTag(){
         List<TagVO> tag = tagService.getTag();
         return ApiResult.success(tag);
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有标签")
     @RequestMapping("/getAll")
     public ApiResult<Page<Tag>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
@@ -73,7 +75,7 @@ public class TagController {
         Page<Tag> tagPage = tagService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(tagPage);
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除标签")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id)

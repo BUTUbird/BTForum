@@ -170,6 +170,7 @@ public class UserController {
      * @param pageSize
      * @return
      */
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有用户")
     @RequestMapping("/getAll")
     public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
@@ -178,6 +179,7 @@ public class UserController {
         Page<User> umsUserPage=userService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(umsUserPage);
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") String id)
@@ -187,7 +189,7 @@ public class UserController {
         commentService.remove(new LambdaQueryWrapper<Comment>().eq(Comment::getUserId,id));
         return ApiResult.success(null,"删除成功");
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "查找用户")
     @RequestMapping("/searchOne")
     public ApiResult<Page<User>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
@@ -199,7 +201,7 @@ public class UserController {
     }
 
 
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取token")
     @PostMapping("/token")
     public ApiResult<Map<String, String>>token(@Valid @RequestBody LoginDTO dto){

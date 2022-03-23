@@ -12,6 +12,7 @@ import org.butu.model.entity.Billboard;
 import org.butu.model.entity.Carousel;
 import org.butu.service.CarouselService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class CarouselController {
         return ApiResult.success(list);
     }
 
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有")
     @GetMapping("/getAll")
     public ApiResult<Page<Carousel>>getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
@@ -47,6 +48,7 @@ public class CarouselController {
         Page<Carousel> carousel= carouselService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(carousel);
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除")
     @DeleteMapping("/deleteOne/{id}")
     public ApiResult<String> deleteOne(@PathVariable("id") Integer id)
@@ -54,7 +56,7 @@ public class CarouselController {
         carouselService.removeById(id);
         return ApiResult.success(null,"删除成功");
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "禁用")
     @RequestMapping("/disableOne/{id}")
     public ApiResult<String> disableOne(@PathVariable("id") Integer id)
@@ -64,6 +66,7 @@ public class CarouselController {
         carouselService.updateById(carousel);
         return ApiResult.success(null,"禁用成功");
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "显示")
     @PostMapping("/ableOne/{id}")
     public ApiResult<String> ableOne(@PathVariable("id") Integer id)
@@ -73,6 +76,7 @@ public class CarouselController {
         carouselService.updateById(carousel);
         return ApiResult.success(null,"已启用");
     }
+    @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "新增")
     @PostMapping("/insertOne")
     public ApiResult<String> insertOne(@Valid @RequestBody CarouselDTO dto)
