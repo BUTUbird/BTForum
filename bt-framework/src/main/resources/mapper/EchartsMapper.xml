@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.butu.mapper.EchartsMapper">
+
+    <select id="selectPostsByUser" resultType="org.butu.model.vo.p_echartsVO">
+        ##发帖数查询
+        select
+            u.id,u.username,count(p.user_id) as 'posts'
+        from bt_user u
+                 left join bt_post p on u.id = p.user_id
+        group by u.id;
+    </select>
+</mapper>

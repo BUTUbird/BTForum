@@ -58,14 +58,6 @@ public class TagController {
 
         return ApiResult.success(map);
     }
-
-    @PreAuthorize("hasAnyAuthority('admin')")
-    @ApiOperation(value = "表格数据")
-    @RequestMapping("/echar")
-    public ApiResult<List<TagVO>> getTag(){
-        List<TagVO> tag = tagService.getTag();
-        return ApiResult.success(tag);
-    }
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有标签")
     @RequestMapping("/getAll")
