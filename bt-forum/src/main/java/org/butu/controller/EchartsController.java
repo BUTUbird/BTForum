@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
 import org.butu.mapper.EchartsMapper;
 import org.butu.model.vo.TagVO;
-import org.butu.model.vo.p_echartsVO;
+import org.butu.model.vo.P_EchartsVO;
 import org.butu.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,8 +42,14 @@ public class EchartsController {
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "用户发帖数据图")
     @GetMapping("/getPostsByUser")
-    public ApiResult<List<p_echartsVO>> getPosts(){
+    public ApiResult<List<P_EchartsVO>> getPosts(){
         return ApiResult.success(echartsMapper.selectPostsByUser());
     }
 
+//    @PreAuthorize("hasAnyAuthority('admin')")
+//    @ApiOperation(value = "用户发帖数据图")
+//    @GetMapping("/getViewsByPost")
+//    public ApiResult<List<P_EchartsVO>> getViewsByPost(){
+//        return ApiResult.success(echartsMapper.selectViewsByPost());
+//    }
 }

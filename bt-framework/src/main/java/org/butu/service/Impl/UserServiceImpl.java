@@ -18,6 +18,7 @@ import org.butu.model.vo.ProfileVO;
 import org.butu.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+//import org.butu.utils.MailServiceUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -178,5 +180,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //修改redis
         redisCache.deleteObject(name);
     }
+
+    @Override
+    public User findUserByMail(String mail) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getEmail, mail);
+        User user = baseMapper.selectOne(queryWrapper);
+        if (Objects.isNull(user)){
+            ApiAsserts.fail("没有这个邮箱呀！");
+        }
+        return user;
+    }
+
 
 }

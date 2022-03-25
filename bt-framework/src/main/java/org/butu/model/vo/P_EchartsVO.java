@@ -10,7 +10,7 @@ import lombok.Data;
  * @date: 2022-03-24 22:44
  **/
 @Data
-public class p_echartsVO {
+public class P_EchartsVO {
     private String id;
     private String username;
     private String posts;

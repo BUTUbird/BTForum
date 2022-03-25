@@ -73,3 +73,13 @@ secure:
       - /swagger/**
       - /carousel/show
 
+#  #邮件发送
+#  spring.mail.host=smtp.qq.com
+#  spring.mail.default-encoding=UTF-8
+#  # 发送账号，用户名，也就是使用哪个邮箱发送
+#  spring.mail.username=1781894948@qq.com
+#  # 密码，这里密码一般指的是授权密码，开启POP3/SMTP服务
+#  spring.mail.password=xeqzstieuetlecfd
+#  # 邮箱验证链接前缀，到时候拼接uuid
+#  my-config-mail.ip=http://127.0.0.1:8088/verifyMail/
+

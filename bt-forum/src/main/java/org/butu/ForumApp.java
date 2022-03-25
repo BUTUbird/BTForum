@@ -9,7 +9,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author BUTU
  */
 @SpringBootApplication
-@MapperScan("org.butu.mapper")
 public class ForumApp extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(ForumApp.class, args);

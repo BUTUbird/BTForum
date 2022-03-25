@@ -1,7 +1,7 @@
 package org.butu.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.butu.model.vo.p_echartsVO;
+import org.butu.model.vo.P_EchartsVO;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ import java.util.List;
 @Mapper
 public interface EchartsMapper {
 
-    public List<p_echartsVO> selectPostsByUser();
+    public List<P_EchartsVO> selectPostsByUser();
 }

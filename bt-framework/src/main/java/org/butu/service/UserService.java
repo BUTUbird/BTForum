@@ -32,4 +32,6 @@ public interface UserService extends IService<User> {
     void updateImg(String url,String username);
 
     void logout(String name);
+
+    User findUserByMail(String mail);
 }

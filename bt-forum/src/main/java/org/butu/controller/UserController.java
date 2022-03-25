@@ -7,7 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.butu.common.api .ApiResult;
+import org.butu.common.annotation.SystemLog;
+import org.butu.common.api.ApiResult;
 import org.butu.config.redis.RedisCache;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.RegisterDTO;
@@ -18,6 +19,7 @@ import org.butu.service.CommentService;
 import org.butu.service.PostService;
 import org.butu.service.UploadService;
 import org.butu.service.UserService;
+//import org.butu.utils.MailServiceUtils;
 import org.butu.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -66,41 +68,43 @@ public class UserController {
 
     @ApiOperation(value = "注册")
     @PostMapping("/register")
-    public ApiResult<Map<String, Object>>register(@Valid @RequestBody RegisterDTO dto){
-        String code =  redisCache.getCacheObject("KAPTCHA_KEY");
-        if (!code.equals(dto.getCode())){
+    public ApiResult<Map<String, Object>> register(@Valid @RequestBody RegisterDTO dto) {
+        String code = redisCache.getCacheObject("KAPTCHA_KEY");
+        if (!code.equals(dto.getCode())) {
             return ApiResult.failed("验证码错误");
         }
         User user = userService.executeRegister(dto);
-        if (ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             return ApiResult.failed("账号注册失败");
         }
-        Map<String, Object>map = new HashMap<>(16);
-        map.put("user",user);
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("user", user);
         return ApiResult.success(map);
     }
 
     @ApiOperation(value = "登录")
     @PostMapping("/login")
-    public ApiResult<Map<String, String>>login(@Valid @RequestBody LoginDTO dto){
-        String code =  redisCache.getCacheObject("KAPTCHA_KEY");
-        if (!code.equals(dto.getCode())){
+    public ApiResult<Map<String, String>> login(@Valid @RequestBody LoginDTO dto) {
+        String code = redisCache.getCacheObject("KAPTCHA_KEY");
+        if (!code.equals(dto.getCode())) {
             return ApiResult.failed("验证码错误");
         }
         String token = userService.executeLogin(dto);
-        if (ObjectUtils.isEmpty(token)){
+        if (ObjectUtils.isEmpty(token)) {
             return ApiResult.failed("账号密码错误");
         }
-        Map<String, String>map = new HashMap<>(16);
-        map.put("token",token);
-        return ApiResult.success(map,"登录成功");
+        Map<String, String> map = new HashMap<>(16);
+        map.put("token", token);
+        return ApiResult.success(map, "登录成功");
     }
+
 
 
     @ApiOperation(value = "获取用户信息")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/info")
-    public ApiResult<User> getUser(Principal principal){
+    @SystemLog(businessName = "获取用户信息")
+    public ApiResult<User> getUser(Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
         return ApiResult.success(user);
     }
@@ -108,9 +112,9 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "退出登录")
     @GetMapping("/logout")
-    public ApiResult<Object>logout(Principal principal){
+    public ApiResult<Object> logout(Principal principal) {
         userService.logout(principal.getName());
-        return ApiResult.success(null,"注销成功");
+        return ApiResult.success(null, "注销成功");
     }
 
     @ApiOperation(value = "获取用户名")
@@ -127,6 +131,8 @@ public class UserController {
         map.put("topics", page);
         return ApiResult.success(map);
     }
+
+
     @ApiOperation(value = "更新用户信息")
     @PostMapping("/update")
     public ApiResult<User> updateUser(@RequestBody User umsUser) {
@@ -137,15 +143,15 @@ public class UserController {
     @ApiOperation(value = "上传头像")
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/uploadImg")
-    public ApiResult uploadImg(MultipartFile file,Principal principal){
+    public ApiResult uploadImg(MultipartFile file, Principal principal) {
         String url = uploadService.upload(file);
-        userService.updateImg(url,principal.getName());
+        userService.updateImg(url, principal.getName());
         return ApiResult.success(url);
     }
 
     @ApiOperation(value = "验证码")
     @GetMapping("/verify")
-    public void createImageCode(HttpServletResponse response) throws IOException{
+    public void createImageCode(HttpServletResponse response) throws IOException {
         //禁止缓存
         response.setDateHeader("Expires", 0);
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
@@ -156,7 +162,7 @@ public class UserController {
         // 生成图片验证码
         BufferedImage image = new BufferedImage(300, 75, BufferedImage.TYPE_INT_RGB);
         String randomText = VerifyCodeUtils.drawRandomText(image);
-        System.out.println("验证码->>>"+randomText);
+        System.out.println("验证码->>>" + randomText);
         redisCache.setCacheObject("KAPTCHA_KEY", randomText, 60, TimeUnit.SECONDS);
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "png", out);
@@ -164,8 +170,16 @@ public class UserController {
         out.close();
     }
 
+//    @PostMapping("/findMail")
+//    public ApiResult<String> findMail(String mail) {
+//        new MailServiceUtils().sendCode(userService.findUserByMail(mail));
+//        return ApiResult.success("发送成功");
+//    }
+
+
     /**
      * 后台用户管理
+     *
      * @param pageNo
      * @param pageSize
      * @return
@@ -173,30 +187,27 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有用户")
     @RequestMapping("/getAll")
-    public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
-                                           @RequestParam(value = "size", defaultValue = "10") Integer pageSize)
-    {
-        Page<User> umsUserPage=userService.page(new Page<>(pageNo, pageSize));
+    public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+                                        @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
+        Page<User> umsUserPage = userService.page(new Page<>(pageNo, pageSize));
         return ApiResult.success(umsUserPage);
     }
+
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/deleteOne/{id}")
-    public ApiResult<String> deleteOne(@PathVariable("id") String id)
-    {
+    public ApiResult<String> deleteOne(@PathVariable("id") String id) {
         userService.removeById(id);
         postService.remove(new LambdaQueryWrapper<Post>().eq(Post::getUserId, id));
-        commentService.remove(new LambdaQueryWrapper<Comment>().eq(Comment::getUserId,id));
-        return ApiResult.success(null,"删除成功");
+        commentService.remove(new LambdaQueryWrapper<Comment>().eq(Comment::getUserId, id));
+        return ApiResult.success(null, "删除成功");
     }
+
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "查找用户")
     @RequestMapping("/searchOne")
-    public ApiResult<Page<User>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1")  Integer pageNo,
-                                              @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
-                                              @RequestParam(value = "key") String key)
-    {
-        Page<User> umsUserPage = userService.searchKey(key,new Page<>(pageNo, pageSize));
+    public ApiResult<Page<User>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(value = "size", defaultValue = "10") Integer pageSize, @RequestParam(value = "key") String key) {
+        Page<User> umsUserPage = userService.searchKey(key, new Page<>(pageNo, pageSize));
         return ApiResult.success(umsUserPage);
     }
 
@@ -204,13 +215,13 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取token")
     @PostMapping("/token")
-    public ApiResult<Map<String, String>>token(@Valid @RequestBody LoginDTO dto){
+    public ApiResult<Map<String, String>> token(@Valid @RequestBody LoginDTO dto) {
         String token = userService.executeLogin(dto);
-        if (ObjectUtils.isEmpty(token)){
+        if (ObjectUtils.isEmpty(token)) {
             return ApiResult.failed("账号密码错误");
         }
-        Map<String, String>map = new HashMap<>(16);
-        map.put("token",token);
-        return ApiResult.success(map,"登录成功");
+        Map<String, String> map = new HashMap<>(16);
+        map.put("token", token);
+        return ApiResult.success(map, "登录成功");
     }
 }

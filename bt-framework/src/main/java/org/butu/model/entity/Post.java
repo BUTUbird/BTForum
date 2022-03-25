@@ -9,9 +9,7 @@ import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -28,6 +26,8 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @ApiModel(value = "Post对象", description = "话题表")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
