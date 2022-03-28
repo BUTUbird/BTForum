@@ -26,6 +26,7 @@ import java.util.Map;
  * signature的生成算法：
  * HMACSHA512(base64UrlEncode(header) + "." +base64UrlEncode(payload),secret)
  *
+ * @author BUTU
  */
 @Component
 public class JwtTokenUtil {
@@ -143,6 +144,12 @@ public class JwtTokenUtil {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_CREATED, new Date());
+        return generateToken(claims);
+    }
+    public String generateToken(String arg) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USERNAME, arg);
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
     }

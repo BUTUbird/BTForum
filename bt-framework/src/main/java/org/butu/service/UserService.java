@@ -2,6 +2,7 @@ package org.butu.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.butu.model.dto.LoginDTO;
+import org.butu.model.dto.PwdDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -34,4 +35,8 @@ public interface UserService extends IService<User> {
     void logout(String name);
 
     User findUserByMail(String mail);
+
+    User findUserByToken(String token);
+
+    void resetPwd(PwdDTO dto);
 }

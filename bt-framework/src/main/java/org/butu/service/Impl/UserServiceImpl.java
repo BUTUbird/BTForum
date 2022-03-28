@@ -9,6 +9,7 @@ import org.butu.config.security.util.JwtTokenUtil;
 import org.butu.mapper.FollowMapper;
 import org.butu.mapper.PostMapper;
 import org.butu.model.dto.LoginDTO;
+import org.butu.model.dto.PwdDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.Follow;
 import org.butu.model.entity.Post;
@@ -192,5 +193,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user;
     }
 
+    @Override
+    public User findUserByToken(String token) {
+        String userName = jwtTokenUtil.getUserNameFromToken(token);
+        return getUserByUsername(userName);
+    }
 
+    @Override
+    public void resetPwd(PwdDTO dto) {
+        if (dto.getPassword().equals(dto.getRePassword())){
+            LambdaUpdateWrapper<User> update = new LambdaUpdateWrapper<>();
+            update.eq(User::getUsername, dto.getUsername());
+            update.set(User::getPassword,passwordEncoder.encode(dto.getPassword()));
+            baseMapper.update( null,update);
+        }
+    }
 }

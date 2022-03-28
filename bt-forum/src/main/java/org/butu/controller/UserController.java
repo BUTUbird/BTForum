@@ -2,7 +2,6 @@ package org.butu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import io.swagger.annotations.Api;
@@ -11,23 +10,26 @@ import org.butu.common.annotation.SystemLog;
 import org.butu.common.api.ApiResult;
 import org.butu.config.redis.RedisCache;
 import org.butu.model.dto.LoginDTO;
+import org.butu.model.dto.PwdDTO;
 import org.butu.model.dto.RegisterDTO;
 import org.butu.model.entity.Comment;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.User;
+import org.butu.model.vo.UserVO;
 import org.butu.service.CommentService;
 import org.butu.service.PostService;
 import org.butu.service.UploadService;
 import org.butu.service.UserService;
-//import org.butu.utils.MailServiceUtils;
+import org.butu.utils.BeanCopyUtils;
+import org.butu.utils.MailServiceUtils;
 import org.butu.utils.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.service.ApiInfo;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -64,7 +66,8 @@ public class UserController {
     private CommentService commentService;
     @Autowired
     private UploadService uploadService;
-
+    @Autowired
+    private MailServiceUtils mailServiceUtils;
 
     @ApiOperation(value = "注册")
     @PostMapping("/register")
@@ -170,12 +173,23 @@ public class UserController {
         out.close();
     }
 
-//    @PostMapping("/findMail")
-//    public ApiResult<String> findMail(String mail) {
-//        new MailServiceUtils().sendCode(userService.findUserByMail(mail));
-//        return ApiResult.success("发送成功");
-//    }
-
+    @ApiOperation(value = "发送邮件")
+    @GetMapping("/findMail")
+    public ApiResult<String> findMail(@RequestParam("mail") String mail) {
+        mailServiceUtils.sendCode(userService.findUserByMail(mail));
+        return ApiResult.success("发送成功");
+    }
+    @GetMapping("/getMailUser")
+    public ApiResult<UserVO> getMailUser(@RequestParam("token") String token){
+        User user = userService.findUserByToken(token);
+        UserVO userVO = BeanCopyUtils.copyBean(user, UserVO.class);
+        return ApiResult.success(userVO);
+    }
+    @PostMapping("/resetPwd")
+    public ApiResult<String> resetPwd(@Valid @RequestBody PwdDTO dto){
+        userService.resetPwd(dto);
+        return ApiResult.success("密码修改成功");
+    }
 
     /**
      * 后台用户管理

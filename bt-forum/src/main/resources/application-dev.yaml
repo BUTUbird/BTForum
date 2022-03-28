@@ -13,6 +13,22 @@ spring:
     url: jdbc:mariadb://localhost:3306/bt_forum?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=GMT%2B8
     type: com.zaxxer.hikari.HikariDataSource
 
+#发送邮件
+  mail:
+    #这个需要根据你开启的服务的邮箱是QQ邮箱,还是网易邮箱区分
+    #smtp.163.com为网易邮箱,smtp.qq.com为QQ邮箱
+    host: smtp.qq.com
+    username: 1781894948@qq.com #你开通SMTP服务的邮箱账号
+    password: xeqzstieuetlecfd #刚刚生成的授权码,不是邮箱密码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
+
   #Knife4J运行依赖
   mvc:
     pathmatch:
@@ -62,6 +78,7 @@ secure:
       - /tip/today
       - /post/list
       - /promotion/all
+      - /promotion/list
       - /billboard/show
       - /billboard/count
       - /comment/get_comments
@@ -72,6 +89,9 @@ secure:
       - /swagger-resources/**
       - /swagger/**
       - /carousel/show
+      - /user/findMail
+      - /user/getMailUser
+      - /user/resetPwd
 
 #  #邮件发送
 #  spring.mail.host=smtp.qq.com
