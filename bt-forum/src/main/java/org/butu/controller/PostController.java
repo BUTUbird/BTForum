@@ -7,6 +7,7 @@ import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
+import org.butu.model.vo.ViewVO;
 import org.butu.utils.WordFilter.WordFilter;
 import org.butu.model.dto.PostDTO;
 import org.butu.model.entity.*;
@@ -72,10 +73,15 @@ public class PostController {
         return ApiResult.success(map);
     }
 
-    @ApiOperation(value = "随便看看")
-    @GetMapping("/recommend")
-    public ApiResult<List<Post>> getRecommend(@RequestParam("topicId") String id) {
-        List<Post> posts = postService.getRecommend(id);
+//    @ApiOperation(value = "随便看看")
+//    @GetMapping("/recommend")
+//    public ApiResult<List<Post>> getRecommend(@RequestParam("topicId") String id) {
+//        List<Post> posts = postService.getRecommend(id);
+//        return ApiResult.success(posts);
+//    }
+    @GetMapping("/hot")
+    public ApiResult<List<ViewVO>> host(){
+        List<ViewVO> posts = postService.getHotList();
         return ApiResult.success(posts);
     }
 

@@ -6,6 +6,7 @@ import org.butu.model.entity.Post;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.butu.model.vo.PostVO;
+import org.butu.model.vo.ViewVO;
 
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface PostMapper extends BaseMapper<Post> {
     List<Post> selectRecommend(@Param("id") String id);
 
     Page<PostVO> searchByKey(@Param("page") Page<PostVO> page, @Param("keyword") String keyword);
+
+    List<ViewVO> getHotList();
 }

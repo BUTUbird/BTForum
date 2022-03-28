@@ -52,4 +52,5 @@ public class EchartsController {
 //    public ApiResult<List<P_EchartsVO>> getViewsByPost(){
 //        return ApiResult.success(echartsMapper.selectViewsByPost());
 //    }
+
 }

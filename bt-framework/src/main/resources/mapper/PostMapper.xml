@@ -58,4 +58,12 @@
         </where>
         order by t.view desc, t.create_time desc
     </select>
+    <select id="getHotList" resultType="org.butu.model.vo.ViewVO">
+        ##帖子浏览量查询
+        select
+            p.id,u.username,p.title,p.view as 'views'
+        from bt_user u
+                 left join bt_post p on u.id = p.user_id
+        group by p.view desc;
+    </select>
 </mapper>

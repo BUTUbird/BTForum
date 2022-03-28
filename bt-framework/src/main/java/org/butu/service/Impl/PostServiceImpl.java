@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vdurmont.emoji.EmojiParser;
 import org.butu.common.exception.ApiAsserts;
+import org.butu.model.vo.ViewVO;
 import org.butu.utils.WordFilter.WordFilter;
 import org.butu.mapper.TagMapper;
 import org.butu.mapper.UserMapper;
@@ -132,6 +133,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         // 查询话题的标签
         setPostTags(iPage);
         return iPage;
+    }
+
+    @Override
+    public List<ViewVO> getHotList() {
+        return baseMapper.getHotList();
     }
 
     private void setPostTags(Page<PostVO> iPage) {

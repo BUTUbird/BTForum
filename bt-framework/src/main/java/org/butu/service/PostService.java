@@ -6,6 +6,7 @@ import org.butu.model.entity.Post;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.butu.model.entity.User;
 import org.butu.model.vo.PostVO;
+import org.butu.model.vo.ViewVO;
 
 import java.util.List;
 import java.util.Map;
@@ -30,4 +31,6 @@ public interface PostService extends IService<Post> {
     List<Post> getRecommend(String id);
 
     Page<PostVO> searchByKey(String keyword, Page<PostVO> page);
+
+    List<ViewVO> getHotList();
 }
