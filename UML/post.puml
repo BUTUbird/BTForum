@@ -1,0 +1,82 @@
+@startuml
+left to right direction
+actor 用户 as u
+actor 管理员 as g
+
+usecase "帖子管理" as p
+
+package 帖子{
+    usecase "查看" as p1
+    usecase "新建" as p2
+    usecase "修改" as p3
+    usecase "删除" as p4
+    usecase "搜索" as p5
+    usecase "登录" as p6
+    usecase 注册 as p7
+    usecase 找回密码 as p8
+}
+
+
+
+usecase "帖子后台管理" as pd
+
+ usecase 用户管理 as pd1
+ usecase 帖子管理 as pd2
+ usecase 轮播图管理 as pd3
+ usecase 广告管理 as pd4
+ usecase 标签管理 as pd5
+
+
+usecase 封禁用户 as pd1_1
+usecase 解封用户 as pd1_2
+
+usecase 删除违规帖子 as pd2_1
+
+usecase 增加轮播图 as pd3_1
+usecase 删除轮播图 as pd3_2
+usecase 启用轮播图 as pd3_3
+usecase 停用轮播图 as pd3_4
+
+usecase 新增广告 as pd4_1
+usecase 删除广告 as pd4_2
+
+
+usecase 新增标签 as pd5_1
+usecase 删除标签 as pd5_2
+
+
+u -- p
+p ..> p1:依赖
+p ..> p2:依赖
+p ..> p3:依赖
+p ..> p4:依赖
+p ..> p5:依赖
+p ..> p6:依赖
+p ..> p7:依赖
+p ..> p8:依赖
+
+g -- pd
+pd ..> pd1:依赖
+pd ..> pd2:依赖
+pd ..> pd3:依赖
+pd ..> pd4:依赖
+pd ..> pd5:依赖
+
+pd1 ..> pd1_1:依赖
+pd1 ..> pd1_2:依赖
+
+pd2 ..> pd2_1:依赖
+
+pd3 ..> pd3_1:依赖
+pd3 ..> pd3_2:依赖
+pd3 ..> pd3_3:依赖
+pd3 ..> pd3_4:依赖
+
+
+pd4 ..> pd4_1:依赖
+pd4 ..> pd4_2:依赖
+
+pd5 ..> pd5_1:依赖
+pd5 ..> pd5_2:依赖
+
+@enduml
