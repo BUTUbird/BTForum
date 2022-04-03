@@ -48,6 +48,8 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private WordFilter wordFilter;
     @ApiOperation(value = "列表")
     @GetMapping("/list")
     public ApiResult<Page<PostVO>> list(@RequestParam(value = "tab", defaultValue = "latest") String tab,
@@ -92,7 +94,7 @@ public class PostController {
         User user = userService.getUserByUsername(principal.getName());
         Assert.isTrue(user.getId().equals(post.getUserId()), "非本人无权修改");
         post.setModifyTime(new Date());
-        post.setContent(EmojiParser.parseToAliases(WordFilter.replaceWords(post.getContent())));
+        post.setContent(EmojiParser.parseToAliases(wordFilter.replaceWords(post.getContent())));
         postService.updateById(post);
         return ApiResult.success(post);
     }
@@ -101,10 +103,10 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     public ApiResult<String> delete(@PathVariable("id") String id, Principal principal) {
-        User umsUser = userService.getUserByUsername(principal.getName());
+        User user = userService.getUserByUsername(principal.getName());
         Post byId = postService.getById(id);
         Assert.notNull(byId, "来晚一步，话题已不存在");
-        Assert.isTrue(byId.getUserId().equals(umsUser.getId()), "你为什么可以删除别人的话题？？？");
+        Assert.isTrue(byId.getUserId().equals(user.getId()), "你为什么可以删除别人的话题？？？");
         postService.removeById(id);
         return ApiResult.success(null, "删除成功");
     }
@@ -123,8 +125,8 @@ public class PostController {
         User user = userService.getUserById(post.getUserId());
         //user.setTopiccount(user.getTopiccount() - 1);
         userService.updateById(user);
-        List<PostTag> bmsTopicTags = postTagService.selectByTopicId(id);
-        bmsTopicTags.forEach(topicTag -> {
+        List<PostTag> postTags = postTagService.selectByTopicId(id);
+        postTags.forEach(topicTag -> {
             Tag tag = tagService.selectTagById(topicTag.getTagId());
             tag.setTopicCount(tag.getTopicCount() - 1);
             tagService.updateById(tag);
@@ -139,8 +141,8 @@ public class PostController {
     public ApiResult<Page<PostVO>> searchOne(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
                                              @RequestParam(value = "size", defaultValue = "10") Integer pageSize,
                                              @RequestParam(value = "keyword") String keyword) {
-        Page<PostVO> bmsPostPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
-        return ApiResult.success(bmsPostPage);
+        Page<PostVO> postPage = postService.searchByKey(keyword, new Page<>(pageNo, pageSize));
+        return ApiResult.success(postPage);
     }
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "列表（管理员）")

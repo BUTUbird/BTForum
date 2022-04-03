@@ -98,4 +98,5 @@ public class BillboardController {
         CountVO count = billboardService.statistics();
         return ApiResult.success(count);
     }
+
 }

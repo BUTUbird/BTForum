@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <table-set>
+    <table path="bt_forum.bt_follow">
+      <table path="bt_forum.bt_user" from="follower_id" to="id"/>
+    </table>
+    <table path="bt_forum.bt_post">
+      <table path="bt_forum.bt_user" from="user_id" to="id"/>
+    </table>
+    <table path="bt_forum.bt_follow">
+      <table path="bt_forum.bt_user" from="parent_id" to="id"/>
+    </table>
+
+    <table path="bt_forum.bt_comment">
+      <table path="bt_forum.bt_user" from="user_id" to="id"/>
+    </table>
+    <table path="bt_forum.bt_comment">
+      <table path="bt_forum.bt_post" from="topic_id" to="id"/>
+    </table>
+
+    <table path="bt_forum.bt_post_tag">
+      <table path="bt_forum.bt_post" from="topic_id" to="id"/>
+    </table>
+    <table path="bt_forum.bt_post_tag">
+      <table path="bt_forum.bt_tag" from="tag_id" to="id"/>
+    </table>
+  </table-set>
+</data>

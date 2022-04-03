@@ -25,6 +25,8 @@ usecase "帖子后台管理" as pd
  usecase 轮播图管理 as pd3
  usecase 广告管理 as pd4
  usecase 标签管理 as pd5
+ usecase 公告管理 as pd6
+ usecase 敏感词管理 as pd7
 
 
 usecase 封禁用户 as pd1_1
@@ -44,6 +46,15 @@ usecase 删除广告 as pd4_2
 usecase 新增标签 as pd5_1
 usecase 删除标签 as pd5_2
 
+usecase 新增公告 as pd6_1
+usecase 启用公告 as pd6_2
+usecase 停用公告 as pd6_3
+
+usecase 新增违禁词 as pd7_1
+
+
+
+
 
 u -- p
 p ..> p1:依赖
@@ -61,6 +72,9 @@ pd ..> pd2:依赖
 pd ..> pd3:依赖
 pd ..> pd4:依赖
 pd ..> pd5:依赖
+pd ..> pd6:依赖
+pd ..> pd7:依赖
+
 
 pd1 ..> pd1_1:依赖
 pd1 ..> pd1_2:依赖
@@ -79,4 +93,9 @@ pd4 ..> pd4_2:依赖
 pd5 ..> pd5_1:依赖
 pd5 ..> pd5_2:依赖
 
+pd6 ..> pd6_1:依赖
+pd6 ..> pd6_2:依赖
+pd6 ..> pd6_3:依赖
+
+pd7 ..> pd7_1:依赖
 @enduml

@@ -78,16 +78,16 @@ private FollowService followService;
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/unsubscribe/{userId}")
     public ApiResult<Object> handleUnFollow(@PathVariable("userId") String parentId,Principal principal) {
-        User umsUser = userService.getUserByUsername(principal.getName());
+        User user = userService.getUserByUsername(principal.getName());
         Follow one = followService.getOne(
                 new LambdaQueryWrapper<Follow>()
                         .eq(Follow::getParentId, parentId)
-                        .eq(Follow::getFollowerId, umsUser.getId()));
+                        .eq(Follow::getFollowerId, user.getId()));
         if (ObjectUtils.isEmpty(one)) {
             ApiAsserts.fail("未关注！");
         }
         followService.remove(new LambdaQueryWrapper<Follow>().eq(Follow::getParentId, parentId)
-                .eq(Follow::getFollowerId, umsUser.getId()));
+                .eq(Follow::getFollowerId, user.getId()));
         return ApiResult.success(null, "取关成功");
     }
 }

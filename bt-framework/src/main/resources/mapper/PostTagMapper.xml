@@ -3,7 +3,7 @@
 <mapper namespace="org.butu.mapper.PostTagMapper">
     <select id="getTopicIdsByTagId" resultType="java.lang.String">
         SELECT t.topic_id
-        from bms_post_tag t
+        from bt_post_tag t
         where t.tag_id = #{id}
     </select>
 </mapper>

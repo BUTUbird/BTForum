@@ -15,7 +15,7 @@ import java.util.List;
 public class CodeGeneratorUtils {
     public static void main(String[] args) {
         List<String> tables = new ArrayList<>();
-        tables.add("sys_menu");//需要生成的表
+        tables.add("bt_word");//需要生成的表
 
 
         FastAutoGenerator.create("jdbc:mariadb://localhost:3306/bt_forum?useUnicode=true&characterEncoding=utf-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai","root","root")
@@ -40,7 +40,7 @@ public class CodeGeneratorUtils {
                 })
                 .strategyConfig(builder -> {
                     builder.addInclude(tables)
-                            .addTablePrefix("sys_") //过滤表名前缀
+                            .addTablePrefix("bt_") //过滤表名前缀
                             .serviceBuilder()
                             .formatServiceFileName("%sService")
                             .formatServiceImplFileName("%sServiceImpl")

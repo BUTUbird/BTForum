@@ -24,6 +24,8 @@
             order by t.view desc, t.create_time desc
         </if>
     </select>
+
+
     <select id="selectRecommend" resultType="org.butu.model.entity.Post" parameterType="java.lang.String">
         select *
         from bt_post t

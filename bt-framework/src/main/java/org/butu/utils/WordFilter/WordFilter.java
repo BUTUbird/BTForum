@@ -2,13 +2,18 @@ package org.butu.utils.WordFilter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.butu.mapper.WordMapper;
+import org.butu.model.entity.Word;
+import org.butu.service.WordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -20,7 +25,12 @@ import java.util.*;
  * @date: 2022-03-16 12:30
  **/
 @Slf4j
+@Component
 public class WordFilter {
+    @Lazy
+    @Autowired
+    private WordService wordService;
+
     private final static String WORDS = "WORDS";
     private final static String REPLACE_CHAR = "*";
     private static HashMap sensitiveWordMap;
@@ -33,7 +43,7 @@ public class WordFilter {
      * @param text 待检测文字
      * @return 替换后文字
      */
-    public static String replaceWords(String text) {
+    public String replaceWords(String text) {
         if (StringUtils.isBlank(text)) {
             return text;
         }
@@ -41,7 +51,8 @@ public class WordFilter {
         List<String> words = Cache.get(WORDS);
         if (CollectionUtils.isEmpty(words)) {
             //读取敏感词汇文件，存入缓存
-            words = readWordsFile();
+//            words = readWordsFile();
+            words = readWordsFromDataBase();
             Cache.put(WORDS, words);
         }
         if (CollectionUtils.isEmpty(words)) {
@@ -51,10 +62,19 @@ public class WordFilter {
         return WordFilter.replaceSensitiveWord(words, text, WordFilter.minMatchTYpe);
     }
 
+    public List<String> readWordsFromDataBase(){
+        List<Word> list = wordService.list();
+        List<String> words = new ArrayList<>();
+        for (Word word : list) {
+            words.add(word.getWord());
+        }
+        return words;
+    }
+
     /**
      * 读取敏感词汇文件
      */
-    private static List<String> readWordsFile() {
+    public static List<String> readWordsFile() {
         List<String> list = new ArrayList<>();
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -62,6 +82,50 @@ public class WordFilter {
         try {
             Resource resource = new DefaultResourceLoader().getResource("classpath:words.txt");
             inputStream = resource.getInputStream();
+            inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            String txt = "";
+            while (StringUtils.isNotBlank(txt = bufferedReader.readLine())) {
+                list.addAll(
+                        Arrays.asList(
+                                StringUtils.split(
+                                        StringUtils.deleteWhitespace(StringUtils.replace(txt, "，", ",")),
+                                        ","
+                                )
+                        )
+                );
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+        } catch (Exception e) {
+            log.error("读取敏感词汇文件出错", e);
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+                if (inputStreamReader != null) {
+                    inputStreamReader.close();
+                }
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                log.error("读取敏感词汇文件出错", e);
+            }
+        }
+        return list;
+    }
+    public List<String> readWordsFile(String filePath) {
+        List<String> list = new ArrayList<>();
+        InputStream inputStream = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader bufferedReader = null;
+        try {
+            //Resource resource = new DefaultResourceLoader().getResource("classpath:words.txt");
+            URL url = new URL(filePath);
+            inputStream = url.openStream();
             inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(inputStreamReader);
             String txt = "";

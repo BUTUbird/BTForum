@@ -52,7 +52,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private TagService tagService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private WordFilter wordFilter;
     @Override
     public Page<PostVO> getList(Page<PostVO> page, String tab) {
         // 查询话题
@@ -65,7 +66,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Post create(PostDTO dto, User user) {
-        Post post1 = this.baseMapper.selectOne(new LambdaQueryWrapper<Post>().eq(Post::getTitle, WordFilter.replaceWords(dto.getTitle())));
+        Post post1 = this.baseMapper.selectOne(new LambdaQueryWrapper<Post>().eq(Post::getTitle, wordFilter.replaceWords(dto.getTitle())));
         if (!ObjectUtils.isEmpty(post1)){
             ApiAsserts.fail("标题重复，请重新编辑");
         }
@@ -73,9 +74,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Post post = Post.builder()
                 .userId(user.getId())
 //                .title(dto.getTitle()) 敏感词过滤
-                .title(WordFilter.replaceWords(dto.getTitle()))
+                .title(wordFilter.replaceWords(dto.getTitle()))
 //                .content(EmojiParser.parseToAliases(dto.getContent()))
-                .content(EmojiParser.parseToAliases(WordFilter.replaceWords(dto.getContent())))
+                .content(EmojiParser.parseToAliases(wordFilter.replaceWords(dto.getContent())))
                 .createTime(new Date())
                 .build();
         this.baseMapper.insert(post);

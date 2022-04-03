@@ -203,8 +203,8 @@ public class UserController {
     @RequestMapping("/getAll")
     public ApiResult<Page<User>> getAll(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
                                         @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
-        Page<User> umsUserPage = userService.page(new Page<>(pageNo, pageSize));
-        return ApiResult.success(umsUserPage);
+        Page<User> UserPage = userService.page(new Page<>(pageNo, pageSize));
+        return ApiResult.success(UserPage);
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
