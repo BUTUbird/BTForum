@@ -75,6 +75,7 @@ public class RedisCache
     public <T> T getCacheObject(final String key)
     {
         ValueOperations<String, T> operation = redisTemplate.opsForValue();
+        System.out.println(operation.get(key));
         return operation.get(key);
     }
 

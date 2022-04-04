@@ -17,6 +17,8 @@ public class CommentVO {
 
     private String avatar;
 
+    private Integer roleId;
+
     private String username;
 
     private Date createTime;

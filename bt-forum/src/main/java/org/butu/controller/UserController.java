@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.annotation.SystemLog;
 import org.butu.common.api.ApiResult;
+import org.butu.common.exception.ApiAsserts;
 import org.butu.config.redis.RedisCache;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.PwdDTO;
@@ -73,6 +74,9 @@ public class UserController {
     @PostMapping("/register")
     public ApiResult<Map<String, Object>> register(@Valid @RequestBody RegisterDTO dto) {
         String code = redisCache.getCacheObject("KAPTCHA_KEY");
+        if (code == null){
+            return ApiResult.failed("验证码已过期");
+        }
         if (!code.equals(dto.getCode())) {
             return ApiResult.failed("验证码错误");
         }
@@ -89,8 +93,15 @@ public class UserController {
     @PostMapping("/login")
     public ApiResult<Map<String, String>> login(@Valid @RequestBody LoginDTO dto) {
         String code = redisCache.getCacheObject("KAPTCHA_KEY");
+        if (code == null){
+            return ApiResult.failed("验证码已过期");
+        }
         if (!code.equals(dto.getCode())) {
             return ApiResult.failed("验证码错误");
+        }
+        User user = userService.getUserByUsername(dto.getUsername());
+        if (user == null){
+            ApiAsserts.fail("账号不存在");
         }
         String token = userService.executeLogin(dto);
         if (ObjectUtils.isEmpty(token)) {

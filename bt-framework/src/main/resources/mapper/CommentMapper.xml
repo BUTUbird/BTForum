@@ -3,7 +3,7 @@
 <mapper namespace="org.butu.mapper.CommentMapper">
 
     <select id="getCommentsByPostID" resultType="org.butu.model.vo.CommentVO" parameterType="java.lang.String">
-        select bt_comment.*,bt_user.username,bt_user.avatar
+        select bt_comment.*,bt_user.username,bt_user.avatar,bt_user.role_id
         from bt_comment
                  join bt_user on bt_user.id = bt_comment.user_id
         where topic_id = #{topicid}

@@ -53,4 +53,9 @@ public class ProfileVO {
      */
     private Integer commentCount;
 
+    /**
+     * 权限
+     */
+    private Integer roleId;
+
 }
