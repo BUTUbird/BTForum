@@ -1,5 +1,7 @@
 package org.butu.service;
 
+import org.butu.common.api.ApiResult;
+import org.butu.model.dto.ChildCommentDTO;
 import org.butu.model.dto.CommentDTO;
 import org.butu.model.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,7 +20,8 @@ import java.util.List;
  */
 public interface CommentService extends IService<Comment> {
 
-    List<CommentVO> getCommentsByPostId(String postId);
+    List<CommentVO> getCommentsByPostId(String postId,Integer pageNum, Integer pageSize);
 
     Comment create(CommentDTO dto, User user);
+    Comment create(ChildCommentDTO dto, User user);
 }

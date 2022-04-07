@@ -54,5 +54,12 @@ public class Comment implements Serializable {
     @TableField("modify_time")
     private LocalDateTime modifyTime;
 
+    @ApiModelProperty("父评论作者ID")
+    @TableField("parent_user_id")
+    private String parentId;
+
+    @ApiModelProperty("RootID")
+    @TableField("root_id")
+    private String rootId;
 
 }

@@ -3,6 +3,7 @@ package org.butu.model.vo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class CommentVO {
@@ -23,4 +24,10 @@ public class CommentVO {
 
     private Date createTime;
 
+    private String parentId;
+
+    private String parentUserName;
+
+    private List<CommentVO> children;
 }
+
