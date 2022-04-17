@@ -54,6 +54,7 @@ public class CommentController {
         }
         User user = userService.getUserByUsername(principal.getName());
         Comment comment = commentService.create(dto, user);
+
         return ApiResult.success(comment);
     }
     @ApiOperation(value = "删除评论")

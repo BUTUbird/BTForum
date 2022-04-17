@@ -9,8 +9,10 @@ import org.butu.common.exception.ApiAsserts;
 import org.butu.model.entity.Follow;
 import org.butu.model.entity.User;
 import org.butu.service.FollowService;
+import org.butu.service.MessageService;
 import org.butu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class RelationshipController{
 private UserService userService;
 @Autowired
 private FollowService followService;
+@Autowired
+private MessageService messageService;
+
 
     @ApiOperation(value = "是否关注")
     @PreAuthorize("isAuthenticated()")
@@ -66,11 +71,11 @@ private FollowService followService;
         if (!ObjectUtils.isEmpty(one)) {
             ApiAsserts.fail("已关注");
         }
-
         Follow follow = new Follow();
         follow.setParentId(parentId);
         follow.setFollowerId(user.getId());
         followService.save(follow);
+        messageService.createMessage(parentId, user.getId(),"关注了你");
         return ApiResult.success(null, "关注成功");
     }
 

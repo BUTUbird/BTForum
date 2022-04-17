@@ -68,4 +68,18 @@
                  left join bt_post p on u.id = p.user_id
         group by p.view desc;
     </select>
+    <select id="selectLikeListAndPage" resultType="org.butu.model.vo.PostVO">
+        ##关注帖子查询
+        select
+            p.id,p.title,p.user_id,p.comments,
+            p.view,p.collects,p.top,p.essence,
+            p.create_time ,p.modify_time ,
+            u.username,u.alias, u.avatar
+        from bt_post p
+                 left join bt_user u on u.id = p.user_id
+        where user_id in (
+            select parent_id from bt_follow f
+            where follower_id = #{id}
+        )
+    </select>
 </mapper>

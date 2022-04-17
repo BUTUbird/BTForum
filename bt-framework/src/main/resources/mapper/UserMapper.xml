@@ -13,4 +13,9 @@
             </if>
         </where>
     </select>
+    <select id="getFans" resultType="org.butu.model.entity.User">
+        select * from bt_user u
+                          left join bt_follow f on u.id = f.follower_id
+        where f.parent_id = #{id}
+    </select>
 </mapper>

@@ -59,6 +59,16 @@ public class PostController {
         return ApiResult.success(list);
     }
 
+    @ApiOperation(value = "关注列表")
+    @GetMapping("/like")
+    public ApiResult<Page<PostVO>> like(@RequestParam(value = "id") String id,
+                                        @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+                                        @RequestParam(value = "size", defaultValue = "10") Integer pageSize) {
+        Page<PostVO> list = postService.getLike(new Page<>(pageNo, pageSize), id);
+        return ApiResult.success(list);
+    }
+
+
     @ApiOperation(value = "新增")
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.butu.common.api.ApiResult;
 import org.butu.model.dto.ChildCommentDTO;
 import org.butu.model.vo.PageVo;
+import org.butu.service.MessageService;
+import org.butu.service.PostService;
 import org.butu.service.UserService;
 import org.butu.utils.BeanCopyUtils;
 import org.butu.utils.WordFilter.WordFilter;
@@ -38,6 +40,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private WordFilter wordFilter;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private PostService postService;
 
     @Override
     public List<CommentVO> getCommentsByPostId(String postId,Integer pageNum, Integer pageSize) {
@@ -70,6 +76,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .createTime(new Date())
                 .build();
         this.baseMapper.insert(comment);
+        messageService.createMessage(user.getId(),postService.getById(dto.getTopic_id()).getUserId() ,"评论了你的帖子:" + comment.getContent());
         return comment;
     }
 

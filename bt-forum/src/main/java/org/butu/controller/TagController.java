@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.butu.common.api.ApiResult;
+import org.butu.common.exception.ApiAsserts;
 import org.butu.model.entity.Post;
 import org.butu.model.entity.Tag;
 import org.butu.model.vo.TagVO;
 import org.butu.service.TagService;
+import org.butu.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -45,7 +48,9 @@ public class TagController {
         LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Tag::getName, tagName);
         Tag one = tagService.getOne(wrapper);
-        Assert.notNull(one, "话题不存在，或已被管理员删除");
+        if (Objects.isNull(one)){
+            ApiAsserts.fail("话题不存在，或已被管理员删除");
+        }
         Page<Post> topics = tagService.selectPostByTagId(new Page<>(page, size), one.getId());
         // 其他热门标签
         Page<Tag> hotTags = tagService.page(new Page<>(1, 10),
@@ -58,6 +63,18 @@ public class TagController {
 
         return ApiResult.success(map);
     }
+
+    @ApiOperation(value = "板块推荐")
+    @GetMapping("/recommendTags")
+    public ApiResult<List<TagVO>> getAllTags() {
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Tag::getTopicCount);
+        List<Tag> list = tagService.list(wrapper);
+        List<TagVO> vo = BeanCopyUtils.copyBeanList(list, TagVO.class);
+        return ApiResult.success(vo);
+    }
+
+
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation(value = "获取所有标签")
     @RequestMapping("/getAll")

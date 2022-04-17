@@ -26,8 +26,6 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-
-
     @ApiOperation(value = "文件上传")
     @PostMapping("/upload")
     public ApiResult upload(@RequestPart MultipartFile file){

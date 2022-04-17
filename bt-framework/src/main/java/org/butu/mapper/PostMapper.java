@@ -35,4 +35,6 @@ public interface PostMapper extends BaseMapper<Post> {
     Page<PostVO> searchByKey(@Param("page") Page<PostVO> page, @Param("keyword") String keyword);
 
     List<ViewVO> getHotList();
+
+    Page<PostVO> selectLikeListAndPage(@Param("page") Page<PostVO> page, @Param("id") String id);
 }

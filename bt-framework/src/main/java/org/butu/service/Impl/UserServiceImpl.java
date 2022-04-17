@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -77,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, dto.getName())
                 .or().eq(User::getEmail, dto.getEmail());
-        User user = baseMapper.selectOne(queryWrapper);
+        List<User> user = baseMapper.selectList(queryWrapper);
         if (!ObjectUtils.isEmpty(user)) {
             ApiResult.failed("账号或邮箱已存在！");
         }
@@ -207,5 +208,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             update.set(User::getPassword,passwordEncoder.encode(dto.getPassword()));
             baseMapper.update( null,update);
         }
+    }
+
+    @Override
+    public List<User> getFans(String id) {
+        return this.baseMapper.getFans(id);
     }
 }

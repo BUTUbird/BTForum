@@ -9,17 +9,12 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import lombok.Data;
-import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
 import org.butu.service.UploadService;
 import org.butu.utils.PathUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
@@ -47,6 +42,7 @@ public class UploadServiceImpl implements UploadService {
         }
         String originalFileName = file.getOriginalFilename();
         //对原始文件名进行判断
+        assert originalFileName != null;
         if (!originalFileName.endsWith(".png") && !originalFileName.endsWith(".jpg") && !originalFileName.endsWith(".txt")){
             //TODO 抛出错误，此处只允许.png
             ApiAsserts.fail("只可以上传png格式的图片哦！");

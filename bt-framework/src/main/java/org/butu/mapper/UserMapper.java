@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Param;
 import org.butu.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.butu.model.vo.ProfileVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper extends BaseMapper<User> {
 
     Page<User> searchkey(@Param("page") Page<User> page, @Param("key") String key);
+
+    List<User> getFans(@Param("id") String id);
 }

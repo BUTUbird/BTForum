@@ -8,6 +8,8 @@ import org.butu.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.butu.model.vo.ProfileVO;
 
+import java.util.List;
+
 /**
  * <p>
  * 用户表 服务类
@@ -39,4 +41,6 @@ public interface UserService extends IService<User> {
     User findUserByToken(String token);
 
     void resetPwd(PwdDTO dto);
+
+    List<User> getFans(String id);
 }

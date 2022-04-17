@@ -33,4 +33,6 @@ public interface PostService extends IService<Post> {
     Page<PostVO> searchByKey(String keyword, Page<PostVO> page);
 
     List<ViewVO> getHotList();
+
+    Page<PostVO> getLike(Page<PostVO> page, String id);
 }

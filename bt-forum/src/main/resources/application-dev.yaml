@@ -92,6 +92,9 @@ secure:
       - /user/findMail
       - /user/getMailUser
       - /user/resetPwd
+      - /api/pushMessage/**
+      - /pushToWeb
+      - /tag/recommendTags
 
 #  #邮件发送
 #  spring.mail.host=smtp.qq.com

@@ -9,18 +9,17 @@ import io.swagger.annotations.ApiOperation;
 import org.butu.common.annotation.SystemLog;
 import org.butu.common.api.ApiResult;
 import org.butu.common.exception.ApiAsserts;
+import org.butu.config.WebSocketServer;
 import org.butu.config.redis.RedisCache;
+import org.butu.mapper.FollowMapper;
 import org.butu.model.dto.LoginDTO;
 import org.butu.model.dto.PwdDTO;
 import org.butu.model.dto.RegisterDTO;
-import org.butu.model.entity.Comment;
-import org.butu.model.entity.Post;
-import org.butu.model.entity.User;
+import org.butu.model.entity.*;
+import org.butu.model.vo.ProfileVO;
+import org.butu.model.vo.UserInfoVo;
 import org.butu.model.vo.UserVO;
-import org.butu.service.CommentService;
-import org.butu.service.PostService;
-import org.butu.service.UploadService;
-import org.butu.service.UserService;
+import org.butu.service.*;
 import org.butu.utils.BeanCopyUtils;
 import org.butu.utils.MailServiceUtils;
 import org.butu.utils.VerifyCodeUtils;
@@ -40,6 +39,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,8 +60,6 @@ public class UserController {
     @Autowired
     private PostService postService;
     @Autowired
-    private DefaultKaptcha defaultKaptcha;
-    @Autowired
     private RedisCache redisCache;
     @Autowired
     private CommentService commentService;
@@ -69,6 +67,10 @@ public class UserController {
     private UploadService uploadService;
     @Autowired
     private MailServiceUtils mailServiceUtils;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private FollowMapper followMapper;
 
     @ApiOperation(value = "注册")
     @PostMapping("/register")
@@ -120,6 +122,30 @@ public class UserController {
     @SystemLog(businessName = "获取用户信息")
     public ApiResult<User> getUser(Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
+        messageService.sendMessage(user.getId());
+        return ApiResult.success(user);
+    }
+
+    @ApiOperation(value = "获取粉丝")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/getFans")
+    public ApiResult<List<ProfileVO>> getFans(Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        List<User> vo =  userService.getFans(user.getId());
+        List<ProfileVO> list = BeanCopyUtils.copyBeanList(vo, ProfileVO.class);
+        return ApiResult.success(list);
+    }
+
+
+    @ApiOperation(value = "获取用户通知")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/initWebSocketData")
+    public ApiResult<?> initWebSocketData(Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        if (user == null){
+            return ApiResult.failed("用户不存在");
+        }
+        messageService.sendMessage(user.getId());
         return ApiResult.success(user);
     }
 
@@ -131,6 +157,18 @@ public class UserController {
         return ApiResult.success(null, "注销成功");
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @ApiOperation(value = "禁用")
+    @RequestMapping("/disableOne/{id}")
+    public ApiResult<String> disableOne(@PathVariable("id") Integer id)
+    {
+        Message message = messageService.getById(id);
+        message.setReadStatus("1");
+        messageService.updateById(message);
+        return ApiResult.success(null,"已读");
+    }
+
+
     @ApiOperation(value = "获取用户名")
     @GetMapping("/{username}")
     public ApiResult<Map<String, Object>> getUserByName(@PathVariable("username") String username,
@@ -139,12 +177,18 @@ public class UserController {
         Map<String, Object> map = new HashMap<>(16);
         User user = userService.getUserByUsername(username);
         Assert.notNull(user, "用户不存在");
+        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+        int followers = followMapper.selectCount((new LambdaQueryWrapper<Follow>().eq(Follow::getParentId, user.getId()))).intValue();
+        userInfoVo.setFollowers(followers);
         Page<Post> page = postService.page(new Page<>(pageNo, size),
                 new LambdaQueryWrapper<Post>().eq(Post::getUserId, user.getId()));
-        map.put("user", user);
+        map.put("user", userInfoVo);
         map.put("topics", page);
         return ApiResult.success(map);
     }
+
+
+
 
 
     @ApiOperation(value = "更新用户信息")

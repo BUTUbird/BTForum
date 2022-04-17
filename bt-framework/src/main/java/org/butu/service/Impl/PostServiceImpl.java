@@ -141,6 +141,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return baseMapper.getHotList();
     }
 
+    @Override
+    public Page<PostVO> getLike(Page<PostVO> page, String id) {
+        Page<PostVO> iPage = this.baseMapper.selectLikeListAndPage(page, id);
+        setPostTags(iPage);
+        return iPage;
+    }
+
     private void setPostTags(Page<PostVO> iPage) {
         iPage.getRecords().forEach(postTag -> {
             List<PostTag> postTags = postTagService.selectByTopicId(postTag.getId());
