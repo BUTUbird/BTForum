@@ -68,6 +68,7 @@
                  left join bt_post p on u.id = p.user_id
         group by p.view desc;
     </select>
+
     <select id="selectLikeListAndPage" resultType="org.butu.model.vo.PostVO">
         ##关注帖子查询
         select
@@ -81,5 +82,6 @@
             select parent_id from bt_follow f
             where follower_id = #{id}
         )
+        order by p.user_id desc,p.create_time desc
     </select>
 </mapper>

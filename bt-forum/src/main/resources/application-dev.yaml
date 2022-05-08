@@ -56,10 +56,10 @@ jwt:
 
 #七牛云配置
 oss:
-  domain: http://r8uj7z8yq.hd-bkt.clouddn.com/     # 访问域名(默认使用七牛云测试域名)
+  domain: http://rb3enpa19.hn-bkt.clouddn.com/     # 访问域名(默认使用七牛云测试域名)
   accessKey: vzzbIV5XEzTXF-sQMjXRxX9NvBuHBGy3B9hVWJ9S # 公钥
   secretKey: 5cjcnrzrDxX2bHTdZ90fJyUwJcM13HPfNyB5dd1w # 私钥
-  bucket: butu  #存储空间名称
+  bucket: butu2  #存储空间名称
 
 #安全路径白名单
 secure:
