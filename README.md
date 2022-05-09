@@ -27,6 +27,42 @@
 ***
 >普通用户：user 密码：123456
 >管理员：admin 密码：123456
+
+## 模块划分
+***
+
+
+
+| 模块名称 | 模块描述 |
+|:---------|:---------|
+|Billboard | 公告 |
+|Carousel | 轮播 |
+|Comment | 评论 |
+|Echart | 图表 |
+|Post | 帖子 |
+|Promotion | 广告 |
+|Relation | 关系 |
+|Search | 搜索 |
+|Tag | 标签 |
+|Tip | 一言 |
+|Upload | 上传 |
+|User | 用户 |
+|WebSocket | WebSocket & 消息提醒 |
+|Word |敏感词|
+
+
+## 系统架构
+***
+<img src="DOC/img/架构图.png">
+
+
+## 数据库结构
+***
+>ER图是IDEA自动生成的，将就看吧。
+
+<img src="DOC/img/数据库.png">
+
+
 ## 后端技术
 ***
 |       技术       |           说明           |                                           官网                                            |
